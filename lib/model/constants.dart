@@ -1,11 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+const kMakkahLat = 0.3738927226761722; //21.4224750 deg
+const kMakkahLon = 0.6950985611585316; //39.8262139 deg
+
+const kLightBlue = Color(0xff263a4c);
+const kDarkBlue = Color(0xff4b7aa1);
+
 const kLargTextStyle = TextStyle(
   fontSize: 40,
   color: Colors.white,
   fontWeight: FontWeight.w200,
 );
+
 const kSmallTextStyle = TextStyle(
   fontSize: 15,
   color: Colors.white,
