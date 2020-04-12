@@ -5,5 +5,8 @@ void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => MaterialApp(home: QiblaView());
+  Widget build(BuildContext context) => MaterialApp(
+        theme: ThemeData(fontFamily: 'SF-Pro'),
+        home: QiblaView(),
+      );
 }
