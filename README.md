@@ -1,16 +1,10 @@
-# qibla_plus
+# Qibla+ | + قبلة
 
-A new Flutter application.
+Qibla+ is an app in which its design is influenced by simplicity and clarity. Its feature is to show the Qibla direction with the least amount of effort done by the user. It supports both English and Arabic languages.
 
-## Getting Started
+## Credits
 
-This project is a starting point for a Flutter application.
+This application is designed by [AbdulelahHajjar](https://github.com/AbdulelahHajjar), implemented by in IOS and Android.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [IOS version](https://github.com/AbdulelahHajjar/QiblaPlus) by [AbdulelahHajjar](https://github.com/AbdulelahHajjar).
+- [Android version](https://github.com/FozanKh/QiblaPlus) by [FozanAlkhalawi](https://github.com/FozanKh).

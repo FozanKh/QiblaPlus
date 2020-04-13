@@ -15,15 +15,17 @@ class LocationController extends ChangeNotifier {
   void getQibla() async {
     locationController = Location();
     FlutterCompass.events.listen((newHeading) {
-      heading = (newHeading ?? 0) * (math.pi / 180);
-      if (heading != null) getAngle();
+      heading = (newHeading) * (math.pi / 180);
+      if (heading != null) {
+        getAngle();
+      }
     });
   }
 
   getLocation() async {
     var location = await locationController.getLocation();
-    lat = location.latitude;
-    lon = location.longitude;
+    lat = location.latitude * math.pi / 180;
+    lon = location.longitude * math.pi / 180;
   }
 
   Future<void> getAngle() async {
@@ -33,10 +35,8 @@ class LocationController extends ChangeNotifier {
       double y = math.cos(lat) * math.sin(kMakkahLat) -
           math.sin(lat) * math.cos(kMakkahLat) * math.cos(kMakkahLon - lon);
       double diffAngle = math.atan2(x, y);
-      print('heading = $heading');
-      print('diff = $diffAngle');
-      print('x= $x,\n y=$y,\n diffAngle= $diffAngle,\n heading = $heading,\n angle = $angle');
-      angle = diffAngle - heading + (2 * math.pi);
+
+      angle = diffAngle - heading;
       notifyListeners();
     }
   }
