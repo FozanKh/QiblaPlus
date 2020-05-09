@@ -7,4 +7,4 @@ Qibla+ is an app in which its design is influenced by simplicity and clarity. It
 This application is designed by [AbdulelahHajjar](https://github.com/AbdulelahHajjar), implemented in IOS and Android.
 
 - [IOS version](https://github.com/AbdulelahHajjar/QiblaPlus) by [AbdulelahHajjar](https://github.com/AbdulelahHajjar).
-- [Android version](https://github.com/FozanKh/QiblaPlus) by [FozanAlkhalawi](https://github.com/FozanKh).
+- [Android version](https://github.com/FozanKh/QiblaPlus-flutter) by [FozanAlkhalawi](https://github.com/FozanKh).
