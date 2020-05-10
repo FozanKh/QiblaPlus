@@ -4,6 +4,7 @@ import 'package:location/location.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:qibla_plus/model/constants.dart';
 import 'dart:math' as math;
+import 'dart:async';
 
 class LocationController extends ChangeNotifier {
   double lat;
@@ -11,11 +12,14 @@ class LocationController extends ChangeNotifier {
   double angle;
   double heading;
   Location locationController;
-
+  Timer timer;
+  Color isExact = kTransparent;
   void getQibla() async {
     locationController = Location();
+    getLocation();
+    timer = Timer.periodic(Duration(minutes: 5), (Timer t) => getLocation());
     FlutterCompass.events.listen((newHeading) {
-      heading = (newHeading) * (math.pi / 180);
+      heading = (newHeading) * (math.pi / 180.0);
       if (heading != null) {
         getAngle();
       }
@@ -24,8 +28,8 @@ class LocationController extends ChangeNotifier {
 
   getLocation() async {
     var location = await locationController.getLocation();
-    lat = location.latitude * math.pi / 180;
-    lon = location.longitude * math.pi / 180;
+    lat = location.latitude * math.pi / 180.0;
+    lon = location.longitude * math.pi / 180.0;
   }
 
   Future<void> getAngle() async {
@@ -35,8 +39,9 @@ class LocationController extends ChangeNotifier {
       double y = math.cos(lat) * math.sin(kMakkahLat) -
           math.sin(lat) * math.cos(kMakkahLat) * math.cos(kMakkahLon - lon);
       double diffAngle = math.atan2(x, y);
-
       angle = diffAngle - heading;
+
+      isExact = (angle < 0.01 && angle > -0.01) ? null : kTransparent;
       notifyListeners();
     }
   }
