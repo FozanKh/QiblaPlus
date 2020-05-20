@@ -5,6 +5,9 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:qibla_plus/model/constants.dart';
 import 'dart:math' as math;
 import 'dart:async';
+import 'package:permission_handler/permission_handler.dart';
+
+enum PermissionStatus { isGranted, isDenied, isUndetermined }
 
 class LocationController extends ChangeNotifier {
   double lat;
@@ -14,10 +17,13 @@ class LocationController extends ChangeNotifier {
   Location locationController;
   Timer timer;
   Color isExact = kTransparent;
+  bool errExists = false;
+  PermissionStatus status;
+
   void getQibla() async {
     locationController = Location();
     getLocation();
-    timer = Timer.periodic(Duration(minutes: 5), (Timer t) => getLocation());
+    timer = Timer.periodic(Duration(minutes: 2), (Timer t) => getLocation());
     FlutterCompass.events.listen((newHeading) {
       heading = (newHeading) * (math.pi / 180.0);
       if (heading != null) {
@@ -26,18 +32,17 @@ class LocationController extends ChangeNotifier {
     });
   }
 
-  getLocation() async {
+  void getLocation() async {
     var location = await locationController.getLocation();
     lat = location.latitude * math.pi / 180.0;
     lon = location.longitude * math.pi / 180.0;
   }
 
   Future<void> getAngle() async {
-    getLocation();
     if (lat != null && lon != null) {
-      double x = math.cos(kMakkahLat) * math.sin(kMakkahLon - lon);
-      double y = math.cos(lat) * math.sin(kMakkahLat) -
-          math.sin(lat) * math.cos(kMakkahLat) * math.cos(kMakkahLon - lon);
+      double x = math.cos(kKabbahLat) * math.sin(kKabbahLon - lon);
+      double y = math.cos(lat) * math.sin(kKabbahLat) -
+          math.sin(lat) * math.cos(kKabbahLat) * math.cos(kKabbahLon - lon);
       double diffAngle = math.atan2(x, y);
       angle = diffAngle - heading;
 
@@ -46,36 +51,22 @@ class LocationController extends ChangeNotifier {
     }
   }
 
-//  var s = StreamBuilder<double>(
-//    stream: FlutterCompass.events,
-//    builder: (context, snapshot) {
-//      if (snapshot.hasError) {
-//        return Text('Error reading heading: ${snapshot.error}');
-//      }
-//
-//      if (snapshot.connectionState == ConnectionState.waiting) {
-//        return Center(
-//          child: CircularProgressIndicator(),
-//        );
-//      }
-//
-//      double direction = snapshot.data;
-//
-//      // if direction is null, then device does not support this sensor
-//      // show error message
-//      if (direction == null)
-//        return Center(
-//          child: Text("Device does not have sensors !"),
-//        );
-//
-//      return Container(
-//        alignment: Alignment.center,
-//        child: Transform.rotate(
-//          angle: ((direction ?? 0) * (math.pi / 180) * -1),
-//          child: Image.asset('assets/compass.jpg'),
-//        ),
-//      );
-//    },
-//  );
-
+  //TODO: PermissionHandler
+  Future<bool> checkPermission() async {
+    var tempStatus = await Permission.locationWhenInUse.status;
+    if (tempStatus.isGranted) {
+      errExists = false;
+      status = PermissionStatus.isGranted;
+      print('Location permission is granted');
+    } else if (tempStatus.isUndetermined) {
+      errExists = true;
+      status = PermissionStatus.isUndetermined;
+      print('Location Permission undetermined');
+    } else {
+      errExists = true;
+      status = PermissionStatus.isDenied;
+      print('Location Permission denied');
+    }
+    notifyListeners();
+  }
 }
