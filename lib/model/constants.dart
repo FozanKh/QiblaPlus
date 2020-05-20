@@ -40,6 +40,11 @@ const kArTips = "نصائح لقبلة أدق:\n  عاير البوصلة بتد
 const kEnTibs = 'Tips for better qibla accuracy:\n ♾\t\tCalibrate compass by moving device in an '
     '8-figure\n🧲\tMove away from electronic devices\n📱\tLay your device flat';
 
-const kArLocationErr = '⚠\nالرجاء إعطاء هذا التطبيق صلاحيات الموقع "أثناء الأستخدام" لمعرفة القبلة';
-const kEnLocationErr = '⚠\n Please allow this app "while using the app" location priviliges to '
-    'determine qibla direction';
+const kArPermissionErr = '⚠\nالرجاء إعطاء هذا التطبيق صلاحيات الموقع "أثناء الأستخدام" '
+    'لمعرفة القبلة';
+const kEnPermissionErr = "⚠\nPlease allow this app 'While using the app' location privileges to "
+    "determine qibla";
+
+const kArLocationServicesErr = "⚠\nالرجاء تفعيل خدمات الموقع من الإعدادات لمعرفة القبلة";
+const kEnLocationServicesErr =
+    "⚠\nPlease enable location services from your device's setting to determine qibla";

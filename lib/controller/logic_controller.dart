@@ -11,6 +11,8 @@ class LogicController extends ChangeNotifier {
   Alignment tipsAlignment;
   TextAlign tipsTextAlignment;
   String tips;
+  String permissionErr;
+  String locationServicesErr;
   SharedPreferences localData;
   String needleAsset = 'images/Needle.png';
   Color isExact = kTransparent;
@@ -36,6 +38,8 @@ class LogicController extends ChangeNotifier {
     tipsAlignment = (currLang == Lang.ar) ? Alignment.centerRight : Alignment.centerLeft;
     tipsTextAlignment = (currLang == Lang.ar) ? TextAlign.right : TextAlign.left;
     tips = (currLang == Lang.ar) ? kArTips : kEnTibs;
+    permissionErr = (currLang == Lang.ar) ? kArPermissionErr : kEnPermissionErr;
+    locationServicesErr = (currLang == Lang.ar) ? kArLocationServicesErr : kEnLocationServicesErr;
   }
 
   //TODO: language
@@ -48,6 +52,8 @@ class LogicController extends ChangeNotifier {
     tipsAlignment = (currLang == Lang.ar) ? Alignment.centerRight : Alignment.centerLeft;
     tipsTextAlignment = (currLang == Lang.ar) ? TextAlign.right : TextAlign.left;
     tips = (currLang == Lang.ar) ? kArTips : kEnTibs;
+    permissionErr = (currLang == Lang.ar) ? kArPermissionErr : kEnPermissionErr;
+    locationServicesErr = (currLang == Lang.ar) ? kArLocationServicesErr : kEnLocationServicesErr;
   }
 
   //TODO: last calibration

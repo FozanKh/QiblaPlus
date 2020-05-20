@@ -20,10 +20,19 @@ class _QiblaViewState extends State<QiblaView> {
     logic = widget.logic; //LogicController();
   }
 
-  Widget getErrMessage() {}
+  Widget getErrMessage() {
+    var temp = Provider.of<LocationController>(context, listen: false);
+    if (temp.status != PermissionStatus.isGranted)
+      return Text(logic.permissionErr);
+    else if (!temp.isLocationEnabled)
+      return Text(logic.locationServicesErr);
+    else
+      return Text('An Error has occur please');
+  }
 
   @override
   Widget build(BuildContext context) {
+    print(Provider.of<LocationController>(context, listen: false).errExists);
     return Consumer<LocationController>(
       builder: (context, location, child) => Container(
         padding: EdgeInsets.only(top: 20, bottom: 10),
@@ -81,7 +90,7 @@ class _QiblaViewState extends State<QiblaView> {
                           (location.errExists)
                               ? getErrMessage()
                               : Transform.rotate(
-                                  angle: (location.angle ?? 0),
+                                  angle: (location.angle ?? 30),
                                   child: Stack(
                                     children: <Widget>[
                                       Image.asset(

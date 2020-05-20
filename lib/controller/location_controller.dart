@@ -17,10 +17,12 @@ class LocationController extends ChangeNotifier {
   Location locationController;
   Timer timer;
   Color isExact = kTransparent;
-  bool errExists = false;
+  bool errExists;
+  bool isLocationEnabled;
   PermissionStatus status;
 
   void getQibla() async {
+    await checkPermission();
     locationController = Location();
     getLocation();
     timer = Timer.periodic(Duration(minutes: 2), (Timer t) => getLocation());
@@ -52,12 +54,16 @@ class LocationController extends ChangeNotifier {
   }
 
   //TODO: PermissionHandler
-  Future<bool> checkPermission() async {
+  Future<void> checkPermission() async {
     var tempStatus = await Permission.locationWhenInUse.status;
     if (tempStatus.isGranted) {
-      errExists = false;
       status = PermissionStatus.isGranted;
       print('Location permission is granted');
+      if (await Permission.locationWhenInUse.serviceStatus != ServiceStatus.enabled) {
+        errExists = true;
+        isLocationEnabled = false;
+        print('Location services is disabled');
+      }
     } else if (tempStatus.isUndetermined) {
       errExists = true;
       status = PermissionStatus.isUndetermined;
