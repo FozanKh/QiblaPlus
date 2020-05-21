@@ -31,7 +31,7 @@ class LogicController {
     ambiguousErr = (currLang == Lang.ar) ? kArAmbiguousErr : kEnAmbiguousErr;
   }
 
-  getCurrLang() async {
+  void getCurrLang() async {
     print('getCurrLang');
     localData = await SharedPreferences.getInstance();
     print(localData.get('language'));
@@ -43,7 +43,7 @@ class LogicController {
     }
   }
 
-  updateLang() {
+  void updateLang() {
     currLang = (currLang == Lang.ar) ? Lang.en : Lang.ar;
     localData.setString('language', currLang.toString());
     langString = (currLang == Lang.ar) ? kEnLangString : kArLangString;

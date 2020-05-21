@@ -19,46 +19,31 @@ class LocationController extends ChangeNotifier {
   bool errExists = false;
   bool isLocationEnabled;
   Permission status;
+  StreamSubscription<double> headingStream;
 
-  void getQibla() async {
-    await statusChecker();
-    timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
-      print('StreamCalled');
-//      statusChecker();
-    });
-    FlutterCompass.events.listen(
-      (newHeading) {
-        heading = (newHeading) * (math.pi / 180.0);
-        if (heading != null) {
-          getAngle();
-        }
-      },
-    );
+  Future<void> setUpQibla() async {
+    await checkStatus();
+    startListening();
   }
 
-  Future<void> statusChecker() async {
+  void startListening() {
+    timer = Timer.periodic(Duration(minutes: 2), (Timer t) {
+      checkStatus();
+    });
+    headingStream = FlutterCompass.events.listen((newHeading) {
+      heading = (newHeading) * (math.pi / 180.0);
+      if (heading != null) {
+        getAngle();
+      }
+    });
+    notifyListeners();
+  }
+
+  Future<void> checkStatus() async {
+    print('CheckingStatus');
     if (locationController == null) locationController = Location();
     await checkPermission();
-    getLocation();
-  }
-
-  void getLocation() async {
-    var location = await locationController.getLocation();
-    lat = location.latitude * math.pi / 180.0;
-    lon = location.longitude * math.pi / 180.0;
-  }
-
-  Future<void> getAngle() async {
-    if (lat != null && lon != null) {
-      double x = math.cos(kKabbahLat) * math.sin(kKabbahLon - lon);
-      double y = math.cos(lat) * math.sin(kKabbahLat) -
-          math.sin(lat) * math.cos(kKabbahLat) * math.cos(kKabbahLon - lon);
-      double diffAngle = math.atan2(x, y);
-      angle = diffAngle - heading;
-
-      isExact = (angle < 0.01 && angle > -0.01) ? null : kTransparent;
-      notifyListeners();
-    }
+    await getLocation();
   }
 
   Future<void> checkPermission() async {
@@ -78,5 +63,23 @@ class LocationController extends ChangeNotifier {
       print("Location Permission isn't granted");
     }
     notifyListeners();
+  }
+
+  Future<void> getLocation() async {
+    var location = await locationController.getLocation();
+    lat = location.latitude * math.pi / 180.0;
+    lon = location.longitude * math.pi / 180.0;
+  }
+
+  Future<void> getAngle() async {
+    if (lat != null && lon != null) {
+      double x = math.cos(kKabbahLat) * math.sin(kKabbahLon - lon);
+      double y = math.cos(lat) * math.sin(kKabbahLat) -
+          math.sin(lat) * math.cos(kKabbahLat) * math.cos(kKabbahLon - lon);
+      double diffAngle = math.atan2(x, y);
+      angle = diffAngle - heading;
+      isExact = (angle < 0.01 && angle > -0.01) ? null : kTransparent;
+      notifyListeners();
+    }
   }
 }

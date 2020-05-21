@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:qibla_plus/controller/location_controller.dart';
 import 'package:qibla_plus/controller/logic_controller.dart';
 import 'package:qibla_plus/model/constants.dart';
 import 'package:qibla_plus/view/qibla_view.dart';
@@ -9,8 +11,14 @@ class LoadingView extends StatefulWidget {
 }
 
 class _LoadingViewState extends State<LoadingView> with WidgetsBindingObserver {
+  LogicController logic;
+  AppLifecycleState appStatus;
+  LocationController location;
+  bool background = false;
   @override
   void initState() {
+    location = Provider.of<LocationController>(context, listen: false);
+    logic = LogicController();
     WidgetsBinding.instance.addObserver(this);
     setUp();
   }
@@ -23,11 +31,31 @@ class _LoadingViewState extends State<LoadingView> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    print('LifeCycleState = $state');
+    switch (state) {
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+        onPause();
+        break;
+      case AppLifecycleState.resumed:
+        onResume();
+        break;
+      default:
+    }
+  }
+
+  void onPause() {
+    print('App is paused');
+    location.timer.cancel();
+    location.headingStream.cancel();
+  }
+
+  void onResume() {
+    print('App is resumed');
+    location.checkPermission();
+    location.startListening();
   }
 
   setUp() async {
-    var logic = LogicController();
     await logic.setUpLang();
     await Future.delayed(Duration(milliseconds: 500));
     Navigator.push(context, MaterialPageRoute(builder: (_) => QiblaView(logic: logic)));
