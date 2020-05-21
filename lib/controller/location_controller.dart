@@ -17,25 +17,34 @@ class LocationController extends ChangeNotifier {
   Location locationController;
   Timer timer;
   Color isExact = kTransparent;
-  bool errExists;
+  bool errExists = false;
   bool isLocationEnabled;
   PermissionStatus status;
 
   void getQibla() async {
-    await checkPermission();
     locationController = Location();
-    getLocation();
-    timer = Timer.periodic(Duration(minutes: 2), (Timer t) => getLocation());
-    FlutterCompass.events.listen((newHeading) {
-      heading = (newHeading) * (math.pi / 180.0);
-      if (heading != null) {
-        getAngle();
-      }
+    await statusChecker();
+    timer = Timer.periodic(Duration(minutes: 2), (Timer t) {
+      statusChecker();
     });
+    FlutterCompass.events.listen(
+      (newHeading) {
+        heading = (newHeading) * (math.pi / 180.0);
+        if (heading != null) {
+          getAngle();
+        }
+      },
+    );
+  }
+
+  Future<void> statusChecker() async {
+    await checkPermission();
+    getLocation();
   }
 
   void getLocation() async {
     var location = await locationController.getLocation();
+    print(location);
     lat = location.latitude * math.pi / 180.0;
     lon = location.longitude * math.pi / 180.0;
   }
@@ -57,6 +66,7 @@ class LocationController extends ChangeNotifier {
   Future<void> checkPermission() async {
     var tempStatus = await Permission.locationWhenInUse.status;
     if (tempStatus.isGranted) {
+      errExists = false;
       status = PermissionStatus.isGranted;
       print('Location permission is granted');
       if (await Permission.locationWhenInUse.serviceStatus != ServiceStatus.enabled) {

@@ -29,6 +29,13 @@ const kSmallTextStyle = TextStyle(
   fontFamily: 'Dubai',
 );
 
+const kErrTextStyle = TextStyle(
+  fontSize: 15,
+  color: Colors.black,
+  fontWeight: FontWeight.w600,
+  fontFamily: 'Dubai',
+);
+
 const kASmallTextStyle = TextStyle(
   fontSize: 15,
   color: Colors.white,
@@ -48,3 +55,8 @@ const kEnPermissionErr = "⚠\nPlease allow this app 'While using the app' locat
 const kArLocationServicesErr = "⚠\nالرجاء تفعيل خدمات الموقع من الإعدادات لمعرفة القبلة";
 const kEnLocationServicesErr =
     "⚠\nPlease enable location services from your device's setting to determine qibla";
+
+const kArAmbiguousErr = "⚠\nعذراً، حدث خطأ في تحديد القبلة، الرجاء إعادة تشغيل التطيبق";
+const kEnAmbiguousErr = "⚠\nSorry, an error has occur please restart the app";
+
+const kErrText = Text(kEnAmbiguousErr, style: kErrTextStyle, textAlign: TextAlign.center);

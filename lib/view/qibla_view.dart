@@ -14,6 +14,12 @@ class QiblaView extends StatefulWidget {
 
 class _QiblaViewState extends State<QiblaView> {
   LogicController logic;
+
+  @override
+  void reassemble() {
+//    Provider.of<LocationController>(context, listen: false).statusChecker();
+  }
+
   @override
   void initState() {
     Provider.of<LocationController>(context, listen: false).getQibla();
@@ -23,16 +29,22 @@ class _QiblaViewState extends State<QiblaView> {
   Widget getErrMessage() {
     var temp = Provider.of<LocationController>(context, listen: false);
     if (temp.status != PermissionStatus.isGranted)
-      return Text(logic.permissionErr);
+      return Container(
+          alignment: Alignment.center,
+          padding: EdgeInsets.all(20),
+          child: Text(logic.permissionErr, style: kErrTextStyle, textAlign: TextAlign.center));
     else if (!temp.isLocationEnabled)
-      return Text(logic.locationServicesErr);
+      return Container(
+          alignment: Alignment.center,
+          padding: EdgeInsets.all(20),
+          child:
+              Text(logic.locationServicesErr, style: kErrTextStyle, textAlign: TextAlign.center));
     else
-      return Text('An Error has occur please');
+      return Container(alignment: Alignment.center, padding: EdgeInsets.all(20), child: kErrText);
   }
 
   @override
   Widget build(BuildContext context) {
-    print(Provider.of<LocationController>(context, listen: false).errExists);
     return Consumer<LocationController>(
       builder: (context, location, child) => Container(
         padding: EdgeInsets.only(top: 20, bottom: 10),
@@ -64,7 +76,7 @@ class _QiblaViewState extends State<QiblaView> {
                       },
                     ),
                     Hero(
-                      tag: 'qabba',
+                      tag: 'kabbah',
                       child: Image.asset(
                         'images/logo.png',
                         height: 75,
@@ -83,28 +95,31 @@ class _QiblaViewState extends State<QiblaView> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      width: 3 * MediaQuery.of(context).size.width / 4,
-                      child: Stack(
-                        children: <Widget>[
-                          Image.asset('images/NeedleBase.png'),
-                          (location.errExists)
-                              ? getErrMessage()
-                              : Transform.rotate(
-                                  angle: (location.angle ?? 30),
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Image.asset(
-                                        logic.needleAsset,
-                                      ),
-                                      Image.asset(
-                                        'images/ExactQibla.png',
-                                        color: location.isExact,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                        ],
+                      constraints: BoxConstraints.tightFor(
+                          width: 3 * MediaQuery.of(context).size.width / 4,
+                          height: 3 * MediaQuery.of(context).size.width / 4),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: AssetImage('images/NeedleBase.png'),
+                        ),
                       ),
+                      child: (location.errExists)
+                          ? getErrMessage()
+                          : Transform.rotate(
+                              angle: location.angle ?? 0,
+                              child: Stack(
+                                children: <Widget>[
+                                  Image.asset(
+                                    logic.needleAsset,
+                                  ),
+                                  Image.asset(
+                                    'images/ExactQibla.png',
+                                    color: location.isExact,
+                                  ),
+                                ],
+                              ),
+                            ),
                     ),
                     Container(
                       height: 150,

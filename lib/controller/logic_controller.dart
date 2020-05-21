@@ -13,11 +13,10 @@ class LogicController extends ChangeNotifier {
   String tips;
   String permissionErr;
   String locationServicesErr;
+  String ambiguousErr;
   SharedPreferences localData;
   String needleAsset = 'images/Needle.png';
   Color isExact = kTransparent;
-
-  //TODO: Add sharedPreference, and handle language properly
 
   getCurrLang() async {
     print('getCurrLang');
@@ -40,10 +39,9 @@ class LogicController extends ChangeNotifier {
     tips = (currLang == Lang.ar) ? kArTips : kEnTibs;
     permissionErr = (currLang == Lang.ar) ? kArPermissionErr : kEnPermissionErr;
     locationServicesErr = (currLang == Lang.ar) ? kArLocationServicesErr : kEnLocationServicesErr;
+    ambiguousErr = (currLang == Lang.ar) ? kArAmbiguousErr : kEnAmbiguousErr;
   }
 
-  //TODO: language
-  //TODO: tips
   Future<void> setUpLang() async {
     print('setUpLang');
     await getCurrLang();
@@ -54,6 +52,7 @@ class LogicController extends ChangeNotifier {
     tips = (currLang == Lang.ar) ? kArTips : kEnTibs;
     permissionErr = (currLang == Lang.ar) ? kArPermissionErr : kEnPermissionErr;
     locationServicesErr = (currLang == Lang.ar) ? kArLocationServicesErr : kEnLocationServicesErr;
+    ambiguousErr = (currLang == Lang.ar) ? kArAmbiguousErr : kEnAmbiguousErr;
   }
 
   //TODO: last calibration

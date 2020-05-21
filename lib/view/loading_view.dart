@@ -27,7 +27,7 @@ class _LoadingViewState extends State<LoadingView> {
       decoration: kGradientBackground,
       child: Center(
         child: Hero(
-          tag: 'qabba',
+          tag: 'kabbah',
           child: Image.asset(
             'images/logo.png',
             width: 100,
