@@ -5,9 +5,8 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:qibla_plus/model/constants.dart';
 import 'dart:math' as math;
 import 'dart:async';
-import 'package:permission_handler/permission_handler.dart';
 
-enum PermissionStatus { isGranted, isDenied, isUndetermined }
+enum Permission { isGranted, isDenied }
 
 class LocationController extends ChangeNotifier {
   double lat;
@@ -19,10 +18,9 @@ class LocationController extends ChangeNotifier {
   Color isExact = kTransparent;
   bool errExists = false;
   bool isLocationEnabled;
-  PermissionStatus status;
+  Permission status;
 
   void getQibla() async {
-    locationController = Location();
     await statusChecker();
     timer = Timer.periodic(Duration(minutes: 2), (Timer t) {
       statusChecker();
@@ -43,8 +41,9 @@ class LocationController extends ChangeNotifier {
   }
 
   void getLocation() async {
+    if (locationController == null) locationController = Location();
+
     var location = await locationController.getLocation();
-    print(location);
     lat = location.latitude * math.pi / 180.0;
     lon = location.longitude * math.pi / 180.0;
   }
@@ -64,24 +63,21 @@ class LocationController extends ChangeNotifier {
 
   //TODO: PermissionHandler
   Future<void> checkPermission() async {
-    var tempStatus = await Permission.locationWhenInUse.status;
-    if (tempStatus.isGranted) {
+//    await locationController.requestPermission();
+    var tempStatus = await locationController.hasPermission();
+    if (tempStatus == PermissionStatus.granted) {
       errExists = false;
-      status = PermissionStatus.isGranted;
+      status = Permission.isGranted;
       print('Location permission is granted');
-      if (await Permission.locationWhenInUse.serviceStatus != ServiceStatus.enabled) {
+      if (!await locationController.serviceEnabled()) {
         errExists = true;
         isLocationEnabled = false;
         print('Location services is disabled');
       }
-    } else if (tempStatus.isUndetermined) {
-      errExists = true;
-      status = PermissionStatus.isUndetermined;
-      print('Location Permission undetermined');
     } else {
       errExists = true;
-      status = PermissionStatus.isDenied;
-      print('Location Permission denied');
+      status = Permission.isDenied;
+      print("Location Permission isn't granted");
     }
     notifyListeners();
   }
