@@ -13,6 +13,7 @@ class QiblaView extends StatefulWidget {
 }
 
 class _QiblaViewState extends State<QiblaView> {
+  bool showCalibration = true;
   LogicController logic;
 
   @override
@@ -22,8 +23,17 @@ class _QiblaViewState extends State<QiblaView> {
 
   @override
   void initState() {
+    calibrate();
     Provider.of<LocationController>(context, listen: false).setUpQibla();
     logic = widget.logic; //LogicController();
+  }
+
+  void calibrate() async {
+    showCalibration = true;
+    setState(() {});
+    await Future.delayed(Duration(seconds: 2));
+    showCalibration = false;
+    setState(() {});
   }
 
   Widget getErrMessage() {
@@ -104,22 +114,36 @@ class _QiblaViewState extends State<QiblaView> {
                           image: AssetImage('images/NeedleBase.png'),
                         ),
                       ),
-                      child: (location.errExists)
-                          ? getErrMessage()
-                          : Transform.rotate(
-                              angle: location.angle ?? 0,
-                              child: Stack(
-                                children: <Widget>[
-                                  Image.asset(
-                                    logic.needleAsset,
-                                  ),
-                                  Image.asset(
-                                    'images/ExactQibla.png',
-                                    color: location.isExact,
-                                  ),
-                                ],
-                              ),
+                      child: Center(
+                        child: Stack(
+                          children: <Widget>[
+                            Visibility(
+                              visible: showCalibration,
+                              child: Image.asset('images/Calibration.gif'),
                             ),
+                            AnimatedOpacity(
+                              opacity: (showCalibration) ? 0 : 1,
+                              duration: Duration(milliseconds: 500),
+                              child: (location.errExists)
+                                  ? getErrMessage()
+                                  : Transform.rotate(
+                                      angle: location.angle ?? 0,
+                                      child: Stack(
+                                        children: <Widget>[
+                                          Image.asset(
+                                            logic.needleAsset,
+                                          ),
+                                          Image.asset(
+                                            'images/ExactQibla.png',
+                                            color: location.isExact,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                     Container(
                       height: 150,
