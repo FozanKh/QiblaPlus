@@ -12,7 +12,7 @@ class QiblaView extends StatefulWidget {
   QiblaView({this.logic});
 }
 
-class _QiblaViewState extends State<QiblaView> {
+class _QiblaViewState extends State<QiblaView> with WidgetsBindingObserver {
   LogicController logic;
 
   @override
@@ -22,8 +22,20 @@ class _QiblaViewState extends State<QiblaView> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     Provider.of<LocationController>(context, listen: false).getQibla();
     logic = widget.logic; //LogicController();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    print('LifeCycleState = $state');
   }
 
   Widget getErrMessage() {
