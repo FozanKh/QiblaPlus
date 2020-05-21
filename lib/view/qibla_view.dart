@@ -17,7 +17,7 @@ class _QiblaViewState extends State<QiblaView> {
 
   @override
   void reassemble() {
-//    Provider.of<LocationController>(context, listen: false).statusChecker();
+    Provider.of<LocationController>(context, listen: false).statusChecker();
   }
 
   @override
@@ -28,7 +28,7 @@ class _QiblaViewState extends State<QiblaView> {
 
   Widget getErrMessage() {
     var temp = Provider.of<LocationController>(context, listen: false);
-    if (temp.status != PermissionStatus.isGranted)
+    if (temp.status != Permission.isGranted)
       return Container(
           alignment: Alignment.center,
           padding: EdgeInsets.all(20),
