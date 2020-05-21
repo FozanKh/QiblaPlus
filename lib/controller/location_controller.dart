@@ -22,8 +22,9 @@ class LocationController extends ChangeNotifier {
 
   void getQibla() async {
     await statusChecker();
-    timer = Timer.periodic(Duration(minutes: 2), (Timer t) {
-      statusChecker();
+    timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
+      print('StreamCalled');
+//      statusChecker();
     });
     FlutterCompass.events.listen(
       (newHeading) {
@@ -36,13 +37,12 @@ class LocationController extends ChangeNotifier {
   }
 
   Future<void> statusChecker() async {
+    if (locationController == null) locationController = Location();
     await checkPermission();
     getLocation();
   }
 
   void getLocation() async {
-    if (locationController == null) locationController = Location();
-
     var location = await locationController.getLocation();
     lat = location.latitude * math.pi / 180.0;
     lon = location.longitude * math.pi / 180.0;
@@ -61,9 +61,7 @@ class LocationController extends ChangeNotifier {
     }
   }
 
-  //TODO: PermissionHandler
   Future<void> checkPermission() async {
-//    await locationController.requestPermission();
     var tempStatus = await locationController.hasPermission();
     if (tempStatus == PermissionStatus.granted) {
       errExists = false;

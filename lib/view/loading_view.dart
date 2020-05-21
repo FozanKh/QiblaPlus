@@ -8,10 +8,22 @@ class LoadingView extends StatefulWidget {
   _LoadingViewState createState() => _LoadingViewState();
 }
 
-class _LoadingViewState extends State<LoadingView> {
+class _LoadingViewState extends State<LoadingView> with WidgetsBindingObserver {
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     setUp();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    print('LifeCycleState = $state');
   }
 
   setUp() async {
