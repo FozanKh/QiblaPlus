@@ -17,12 +17,12 @@ class _QiblaViewState extends State<QiblaView> {
 
   @override
   void reassemble() {
-    Provider.of<LocationController>(context, listen: false).statusChecker();
+    Provider.of<LocationController>(context, listen: false).checkStatus();
   }
 
   @override
   void initState() {
-    Provider.of<LocationController>(context, listen: false).getQibla();
+    Provider.of<LocationController>(context, listen: false).setUpQibla();
     logic = widget.logic; //LogicController();
   }
 
