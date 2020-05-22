@@ -17,7 +17,7 @@ class LocationController extends ChangeNotifier {
   Timer timer;
   Color isExact = kTransparent;
   bool errExists = false;
-  bool isLocationEnabled;
+  bool isLocationEnabled = false;
   Permission status;
   StreamSubscription<double> headingStream;
 
@@ -50,6 +50,7 @@ class LocationController extends ChangeNotifier {
     var tempStatus = await locationController.hasPermission();
     if (tempStatus == PermissionStatus.granted) {
       errExists = false;
+      isLocationEnabled = true;
       status = Permission.isGranted;
       print('Location permission is granted');
       if (!await locationController.serviceEnabled()) {
