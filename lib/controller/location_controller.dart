@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:flutter_compass/flutter_compass.dart';
@@ -16,7 +17,7 @@ class LocationController extends ChangeNotifier {
   Location locationController;
   Timer timer;
   Color isExact = kTransparent;
-  bool errExists = false;
+  ValueNotifier<bool> errExists = ValueNotifier(false);
   bool isLocationEnabled = false;
   Permission status;
   StreamSubscription<double> headingStream;
@@ -27,7 +28,7 @@ class LocationController extends ChangeNotifier {
   }
 
   void startListening() {
-    timer = Timer.periodic(Duration(minutes: 2), (Timer t) {
+    timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
       checkStatus();
     });
     headingStream = FlutterCompass.events.listen((newHeading) {
@@ -49,17 +50,17 @@ class LocationController extends ChangeNotifier {
   Future<void> checkPermission() async {
     var tempStatus = await locationController.hasPermission();
     if (tempStatus == PermissionStatus.granted) {
-      errExists = false;
+      errExists.value = false;
       isLocationEnabled = true;
       status = Permission.isGranted;
       print('Location permission is granted');
       if (!await locationController.serviceEnabled()) {
-        errExists = true;
+        errExists.value = true;
         isLocationEnabled = false;
         print('Location services is disabled');
       }
     } else {
-      errExists = true;
+      errExists.value = true;
       status = Permission.isDenied;
       print("Location Permission isn't granted");
     }
@@ -75,8 +76,7 @@ class LocationController extends ChangeNotifier {
   Future<void> getAngle() async {
     if (lat != null && lon != null) {
       double x = math.cos(kKabbahLat) * math.sin(kKabbahLon - lon);
-      double y = math.cos(lat) * math.sin(kKabbahLat) -
-          math.sin(lat) * math.cos(kKabbahLat) * math.cos(kKabbahLon - lon);
+      double y = math.cos(lat) * math.sin(kKabbahLat) - math.sin(lat) * math.cos(kKabbahLat) * math.cos(kKabbahLon - lon);
       double diffAngle = math.atan2(x, y);
       angle = diffAngle - heading;
       isExact = (angle < 0.01 && angle > -0.01) ? null : kTransparent;

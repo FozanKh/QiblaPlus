@@ -17,6 +17,7 @@ class _LoadingViewState extends State<LoadingView> with WidgetsBindingObserver {
   bool background = false;
   @override
   void initState() {
+    super.initState();
     location = Provider.of<LocationController>(context, listen: false);
     logic = LogicController();
     WidgetsBinding.instance.addObserver(this);
@@ -26,6 +27,7 @@ class _LoadingViewState extends State<LoadingView> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override

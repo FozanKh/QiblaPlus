@@ -14,72 +14,80 @@ class QiblaView extends StatefulWidget {
 
 class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMixin {
   final LogicController logic;
+  var listener;
   AnimationController animationController;
   Animation animation;
+  Widget currErr;
   bool showCalibration = false;
   bool showNeedle = false;
   bool showErr = false;
   int currWidgetOpacity = 1;
+  bool xx = false;
 
   _QiblaViewState(this.logic);
   @override
   void reassemble() {
+    super.reassemble();
     print('reassmbled');
-    //    Provider.of<LocationController>(context, listen: false).checkStatus();
+    Provider.of<LocationController>(context, listen: false).checkStatus();
   }
 
   @override
   void initState() {
+    super.initState();
     calibrate();
+
     Provider.of<LocationController>(context, listen: false).setUpQibla();
+    Listener();
   }
 
   void calibrate() async {
+    if (showErr || showNeedle) {
+      showErr = false;
+      showNeedle = false;
+      await Future.delayed(Duration(milliseconds: 600));
+    }
     showCalibration = true;
     setState(() {});
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 4));
     showCalibration = false;
     setState(() {});
+    await Future.delayed(Duration(milliseconds: 600));
+
+    if (Provider.of<LocationController>(context, listen: false).errExists.value) {
+      getErrMessage();
+      showErr = true;
+    } else
+      showNeedle = true;
+    setState(() {});
   }
 
-  Widget getErrMessage() {
+  void getErrMessage() {
     var temp = Provider.of<LocationController>(context, listen: false);
     if (temp.status != Permission.isGranted)
-      return Container(
-          alignment: Alignment.center,
-          padding: EdgeInsets.all(20),
-          child: Text(logic.permissionErr, style: kErrTextStyle, textAlign: TextAlign.center));
+      currErr = Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.all(20),
+        child: Text(logic.permissionErr, style: kErrTextStyle, textAlign: TextAlign.center),
+      );
     else if (!temp.isLocationEnabled)
-      return Container(
-          alignment: Alignment.center,
-          padding: EdgeInsets.all(20),
-          child:
-              Text(logic.locationServicesErr, style: kErrTextStyle, textAlign: TextAlign.center));
+      currErr = Container(alignment: Alignment.center, padding: EdgeInsets.all(20), child: Text(logic.locationServicesErr, style: kErrTextStyle, textAlign: TextAlign.center));
     else
-      return Container(alignment: Alignment.center, padding: EdgeInsets.all(20), child: kErrText);
+      currErr = Container(alignment: Alignment.center, padding: EdgeInsets.all(20), child: kErrText);
+
+    setState(() {});
   }
 
-  Widget getCurrWidget() {
-    setState(() {});
-    if (showCalibration) {
-      return Image.asset('images/Calibration.gif');
-    } else if (Provider.of<LocationController>(context).errExists) {
-      return getErrMessage();
-    } else {
-      return Transform.rotate(
-        angle: Provider.of<LocationController>(context).angle ?? 0,
-        child: Stack(
-          children: <Widget>[
-            Image.asset(
-              logic.needleAsset,
-            ),
-            Image.asset(
-              'images/ExactQibla.png',
-              color: Provider.of<LocationController>(context).isExact,
-            ),
-          ],
-        ),
-      );
+  void errExists() async {
+    if (Provider.of<LocationController>(context).errExists.value) {
+      getErrMessage();
+      if (showCalibration || showNeedle) {
+        showCalibration = false;
+        showNeedle = false;
+        await Future.delayed(Duration(milliseconds: 600));
+      }
+      showCalibration = true;
+      setState(() {});
     }
   }
 
@@ -110,6 +118,7 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
                         ),
                       ),
                       onTap: () {
+                        // xx = xx ? false : true;
                         setState(() {
                           logic.updateLang();
                         });
@@ -131,58 +140,89 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
                   ],
                 ),
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      constraints: BoxConstraints.tightFor(
-                          width: 3 * MediaQuery.of(context).size.width / 4,
-                          height: 3 * MediaQuery.of(context).size.width / 4),
-                      child: Center(
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: <Widget>[
-                            Container(
-                              alignment: Alignment.center,
-                              constraints: BoxConstraints.tightFor(
-                                  width: 3 * MediaQuery.of(context).size.width / 4 - 25,
-                                  height: 3 * MediaQuery.of(context).size.width / 4 - 25),
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.white,
-                                  border: Border.all(color: Colors.grey.shade200, width: 3),
-                                  boxShadow: [BoxShadow(color: Colors.black87, blurRadius: 10)]),
-                            ),
-                            AnimatedOpacity(
-                              opacity: (showCalibration) ? 1 : 0,
-                              duration: Duration(milliseconds: 500),
-                              child: Image.asset('images/Calibration.gif'),
-                            ),
-                            AnimatedOpacity(
-                              opacity: (showNeedle) ? 1 : 0,
-                              duration: Duration(milliseconds: 500),
-                              child: Transform.rotate(
-                                angle: location.angle ?? 0,
-                                child: Stack(
+                      constraints: BoxConstraints.tightFor(width: 3 * MediaQuery.of(context).size.width / 4, height: 3 * MediaQuery.of(context).size.width / 4),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: <Widget>[
+                          Container(
+                            alignment: Alignment.center,
+                            constraints: BoxConstraints.tightFor(width: 3 * MediaQuery.of(context).size.width / 4 - 25, height: 3 * MediaQuery.of(context).size.width / 4 - 25),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle, color: Colors.white, border: Border.all(color: Colors.grey.shade200, width: 3), boxShadow: [BoxShadow(color: Colors.black87, blurRadius: 10)]),
+                          ),
+                          AnimatedOpacity(
+                            opacity: (showCalibration) ? 1 : 0,
+                            duration: Duration(milliseconds: 500),
+                            child: Image.asset('images/Calibration.gif'),
+                          ),
+                          AnimatedOpacity(
+                            opacity: (showCalibration) ? 0 : 1,
+                            duration: Duration(milliseconds: 500),
+                            child: ValueListenableBuilder(
+                              valueListenable: location.errExists,
+                              builder: (context, value, child) => AnimatedCrossFade(
+                                crossFadeState: location.errExists.value ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                                duration: Duration(milliseconds: 700),
+                                firstChild: Transform.rotate(
+                                  angle: location.angle ?? 0,
+                                  child: Stack(
+                                    children: <Widget>[
+                                      Image.asset(
+                                        logic.needleAsset,
+                                      ),
+                                      Image.asset(
+                                        'images/ExactQibla.png',
+                                        color: location.isExact,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                secondChild: currErr ?? SizedBox(),
+                                layoutBuilder: (topChild, topChildKey, bottomChild, bottomChildKey) => Stack(
+                                  overflow: Overflow.visible,
+                                  alignment: Alignment.center,
                                   children: <Widget>[
-                                    Image.asset(
-                                      logic.needleAsset,
+                                    Positioned(
+                                      key: bottomChildKey,
+                                      child: bottomChild,
                                     ),
-                                    Image.asset(
-                                      'images/ExactQibla.png',
-                                      color: location.isExact,
+                                    Positioned(
+                                      key: topChildKey,
+                                      child: topChild,
                                     ),
                                   ],
                                 ),
                               ),
                             ),
-                            AnimatedOpacity(
-                              opacity: (showErr) ? 1 : 0,
-                              duration: Duration(milliseconds: 500),
-                              child: getErrMessage(),
-                            )
-                          ],
-                        ),
+                          )
+                          // AnimatedOpacity(
+                          //   // opacity: (showErr) ? 1 : 0,
+                          //   opacity: 0,
+                          //   duration: Duration(milliseconds: 1200),
+                          //   child: currErr,
+                          // ),
+                          // AnimatedOpacity(
+                          //   // opacity: (showNeedle) ? 1 : 0,
+                          //   opacity: 1,
+                          //   duration: Duration(milliseconds: 500),
+                          //   child: Transform.rotate(
+                          //     angle: location.angle ?? 0,
+                          //     child: Stack(
+                          //       children: <Widget>[
+                          //         Image.asset(
+                          //           logic.needleAsset,
+                          //         ),
+                          //         Image.asset(
+                          //           'images/ExactQibla.png',
+                          //           color: location.isExact,
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
+                        ],
                       ),
                     ),
                     Container(
