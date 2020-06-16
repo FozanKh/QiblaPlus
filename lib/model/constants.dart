@@ -22,7 +22,7 @@ const kLargeTextStyle = TextStyle(
 );
 
 const kSmallTextStyle = TextStyle(
-  fontSize: 18,
+  fontSize: 16,
   color: Colors.white,
   fontWeight: FontWeight.w200,
   fontFamily: 'Dubai',

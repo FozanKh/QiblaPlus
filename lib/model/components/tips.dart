@@ -28,11 +28,7 @@ class kEnglishTips extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.symmetric(horizontal: 10),
       alignment: Alignment.centerLeft,
-      child: Text(
-        kEnTips,
-        textAlign: TextAlign.left,
-        style: kSmallTextStyle,
-      ),
+      child: Text(kEnTips, textAlign: TextAlign.left, style: kSmallTextStyle),
     );
   }
 }

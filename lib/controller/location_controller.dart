@@ -7,7 +7,6 @@ import 'package:qibla_plus/model/constants.dart';
 import 'dart:math' as math;
 import 'dart:async';
 
-enum Permission { isGranted, isDenied }
 
 class LocationController extends ChangeNotifier {
   double lat;
@@ -19,7 +18,7 @@ class LocationController extends ChangeNotifier {
   Color isExact = kTransparent;
   ValueNotifier<bool> errExists = ValueNotifier(false);
   bool isLocationEnabled = false;
-  Permission status;
+  bool isPermissionGranted = false;
   StreamSubscription<double> headingStream;
 
   Future<void> setUpQibla() async {
@@ -51,6 +50,10 @@ class LocationController extends ChangeNotifier {
     if (locationController == null) locationController = Location();
     await checkPermission();
     if (errExists.value) {
+      if (!isLocationEnabled)
+        locationController.requestService();
+      else if (!isPermissionGranted) locationController.requestPermission();
+
       print('Checking status : Error Exists');
       stopListening();
       print('Checking status : Stop Listening');
@@ -75,7 +78,7 @@ class LocationController extends ChangeNotifier {
     if (tempStatus == PermissionStatus.granted) {
       errExists.value = false;
       isLocationEnabled = true;
-      status = Permission.isGranted;
+      isPermissionGranted = true;
       print('Location permission is granted');
       if (!await locationController.serviceEnabled()) {
         errExists.value = true;
@@ -84,7 +87,7 @@ class LocationController extends ChangeNotifier {
       }
     } else {
       errExists.value = true;
-      status = Permission.isDenied;
+      isPermissionGranted = true;
       print("Location Permission isn't granted");
     }
     notifyListeners();

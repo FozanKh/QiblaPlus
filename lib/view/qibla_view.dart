@@ -17,15 +17,9 @@ class QiblaView extends StatefulWidget {
 
 class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMixin {
   final LogicController logic;
-  var listener;
-  AnimationController animationController;
-  Animation animation;
   Widget currErr;
   bool showCalibration = false;
-  bool showNeedle = false;
-  bool showErr = false;
-  int currWidgetOpacity = 1;
-  bool xx = false;
+  Size screen;
 
   _QiblaViewState(this.logic);
   @override
@@ -49,7 +43,7 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
     showCalibration = true;
     setState(() {});
     await Future.delayed(Duration(seconds: 4));
-    // showCalibration = false;
+    showCalibration = false;
     setState(() {});
     await Future.delayed(Duration(milliseconds: 600));
     setState(() {});
@@ -57,12 +51,8 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
 
   void getErrMessage() {
     var temp = Provider.of<LocationController>(context, listen: false);
-    if (temp.status != Permission.isGranted)
-      currErr = Container(
-        alignment: Alignment.center,
-        padding: EdgeInsets.all(20),
-        child: Text(logic.permissionErr, style: kErrTextStyle, textAlign: TextAlign.center),
-      );
+    if (!temp.isPermissionGranted)
+      currErr = Container(alignment: Alignment.center, padding: EdgeInsets.all(20), child: Text(logic.permissionErr, style: kErrTextStyle, textAlign: TextAlign.center));
     else if (!temp.isLocationEnabled)
       currErr = Container(alignment: Alignment.center, padding: EdgeInsets.all(20), child: Text(logic.locationServicesErr, style: kErrTextStyle, textAlign: TextAlign.center));
     else
@@ -183,36 +173,3 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
     );
   }
 }
-
-//        animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 500));
-//    animation = Tween(begin: 0.0, end: 1.0).animate(animationController);
-//    animationController.forward();
-
-//Visibility(
-//                              visible: showCalibration,
-//                              child: Image.asset('images/Calibration.gif'),
-//                            ),
-//                            AnimatedOpacity(
-//                              opacity: 1,
-//                              duration: Duration(milliseconds: 500),
-//                              child: (location.errExists)
-//                                  ? getErrMessage()
-//                                  : Transform.rotate(
-//                                      angle: location.angle ?? 0,
-//                                      child: Stack(
-//                                        children: <Widget>[
-//                                          Image.asset(
-//                                            logic.needleAsset,
-//                                          ),
-//                                          Image.asset(
-//                                            'images/ExactQibla.png',
-//                                            color: location.isExact,
-//                                          ),
-//                                        ],
-//                                      ),
-//                                    ),
-//                            ),
-// FadeTransition(
-//                              opacity: animation,
-//                              child: getCurrWidget(),
-//                            )
