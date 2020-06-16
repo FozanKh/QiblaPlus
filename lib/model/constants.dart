@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:qibla_plus/model/components/tips.dart' as Tips;
 
 const kKabbahLat = 0.3738927226761722; //21.4224750 deg
 const kKabbahLon = 0.6950985611585316; //39.8262139 deg
@@ -46,7 +47,7 @@ const kEnLangString = 'English';
 const kArTips = ": نصائح لقبلة أدق\n  عاير البوصلة بتدوير الجهاز على شكل 8  ♾\n  ابتعد عن "
     "الأجهزة الإلكترونية 🧲\n ضع هاتفك بشكل مسطح📱";
 
-const kEnTibs = 'Tips for better qibla accuracy:\n'
+const kEnTips = 'Tips for better qibla accuracy:\n'
     ' ♾\t\tCalibrate compass by moving device in an 8-figure\n'
     '🧲\tMove away from electronic devices\n'
     '📱\tLay your device flat';
@@ -62,3 +63,6 @@ const kArAmbiguousErr = "⚠\nعذراً، حدث خطأ في تحديد الق�
 const kEnAmbiguousErr = "⚠\nSorry, an error has occur please restart the app";
 
 const kErrText = Text(kEnAmbiguousErr, style: kErrTextStyle, textAlign: TextAlign.center);
+
+const kArabicTips = Tips.kArabicTips;
+const kEnglishTips = Tips.kEnglishTips;

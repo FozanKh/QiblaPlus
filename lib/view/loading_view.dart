@@ -47,13 +47,13 @@ class _LoadingViewState extends State<LoadingView> with WidgetsBindingObserver {
 
   void onPause() {
     print('App is paused');
-    location.timer.cancel();
-    location.headingStream.cancel();
+    location.stopListening();
   }
 
   void onResume() {
     print('App is resumed');
-    location.checkPermission();
+    // location.checkPermission();
+    location.checkStatus();
     location.startListening();
   }
 

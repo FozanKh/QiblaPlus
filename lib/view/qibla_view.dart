@@ -75,21 +75,21 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
     else
       currErr = Container(alignment: Alignment.center, padding: EdgeInsets.all(20), child: kErrText);
 
-    setState(() {});
+    // setState(() {});
   }
 
-  void errExists() async {
-    if (Provider.of<LocationController>(context).errExists.value) {
-      getErrMessage();
-      if (showCalibration || showNeedle) {
-        showCalibration = false;
-        showNeedle = false;
-        await Future.delayed(Duration(milliseconds: 600));
-      }
-      showCalibration = true;
-      setState(() {});
-    }
-  }
+  // void errExists() async {
+  //   if (Provider.of<LocationController>(context).errExists.value) {
+  //     getErrMessage();
+  //     if (showCalibration || showNeedle) {
+  //       showCalibration = false;
+  //       showNeedle = false;
+  //       await Future.delayed(Duration(milliseconds: 600));
+  //     }
+  //     showCalibration = true;
+  //     setState(() {});
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -162,39 +162,44 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
                             duration: Duration(milliseconds: 500),
                             child: ValueListenableBuilder(
                               valueListenable: location.errExists,
-                              builder: (context, value, child) => AnimatedCrossFade(
-                                crossFadeState: location.errExists.value ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                                duration: Duration(milliseconds: 700),
-                                firstChild: Transform.rotate(
-                                  angle: location.angle ?? 0,
-                                  child: Stack(
+                              builder: (context, value, child) {
+                                if (location.errExists.value) {
+                                  getErrMessage();
+                                }
+                                return AnimatedCrossFade(
+                                  crossFadeState: location.errExists.value ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                                  duration: Duration(milliseconds: 700),
+                                  firstChild: Transform.rotate(
+                                    angle: location.angle ?? 0,
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Image.asset(
+                                          logic.needleAsset,
+                                        ),
+                                        Image.asset(
+                                          'images/ExactQibla.png',
+                                          color: location.isExact,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  secondChild: currErr ?? SizedBox(),
+                                  layoutBuilder: (topChild, topChildKey, bottomChild, bottomChildKey) => Stack(
+                                    overflow: Overflow.visible,
+                                    alignment: Alignment.center,
                                     children: <Widget>[
-                                      Image.asset(
-                                        logic.needleAsset,
+                                      Positioned(
+                                        key: bottomChildKey,
+                                        child: bottomChild,
                                       ),
-                                      Image.asset(
-                                        'images/ExactQibla.png',
-                                        color: location.isExact,
+                                      Positioned(
+                                        key: topChildKey,
+                                        child: topChild,
                                       ),
                                     ],
                                   ),
-                                ),
-                                secondChild: currErr ?? SizedBox(),
-                                layoutBuilder: (topChild, topChildKey, bottomChild, bottomChildKey) => Stack(
-                                  overflow: Overflow.visible,
-                                  alignment: Alignment.center,
-                                  children: <Widget>[
-                                    Positioned(
-                                      key: bottomChildKey,
-                                      child: bottomChild,
-                                    ),
-                                    Positioned(
-                                      key: topChildKey,
-                                      child: topChild,
-                                    ),
-                                  ],
-                                ),
-                              ),
+                                );
+                              },
                             ),
                           )
                           // AnimatedOpacity(
@@ -225,17 +230,21 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
                         ],
                       ),
                     ),
-                    Container(
-                      height: 150,
-                      width: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      alignment: logic.tipsAlignment,
-                      child: Text(
-                        logic.tips,
-                        textAlign: logic.tipsTextAlignment,
-                        style: kSmallTextStyle,
-                      ),
-                    )
+                    AnimatedSwitcher(
+                      duration: Duration(milliseconds: 300),
+                      child: logic.tips,
+                    ),
+                    // Container(
+                    //   height: 150,
+                    //   width: MediaQuery.of(context).size.width,
+                    //   padding: EdgeInsets.symmetric(horizontal: 10),
+                    //   alignment: logic.tipsAlignment,
+                    //   child: Text(
+                    //     logic.tips,
+                    //     textAlign: logic.tipsTextAlignment,
+                    //     style: kSmallTextStyle,
+                    //   ),
+                    // )
                   ],
                 ),
               ],

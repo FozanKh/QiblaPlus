@@ -32,6 +32,7 @@ class LocationController extends ChangeNotifier {
       checkStatus();
     });
     headingStream = FlutterCompass.events.listen((newHeading) {
+      print('Error Heading = $newHeading');
       heading = (newHeading) * (math.pi / 180.0);
       if (heading != null) {
         getAngle();
@@ -40,11 +41,33 @@ class LocationController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void stopListening() {
+    if (timer != null && timer.isActive) timer.cancel();
+    if (headingStream != null) headingStream.cancel();
+  }
+
   Future<void> checkStatus() async {
     print('CheckingStatus');
     if (locationController == null) locationController = Location();
     await checkPermission();
-    await getLocation();
+    if (errExists.value) {
+      print('Checking status : Error Exitis');
+      stopListening();
+      print('Checking status : Stop Listening');
+      print('Checking status : Error timer started');
+      timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
+        checkPermission();
+        if (!errExists.value) {
+          print('Checking status : Error Ended');
+          timer.cancel();
+          print('Checking status : timer cancled');
+          startListening();
+          print('Checking status : started listening again');
+        }
+        print('Checking status : Done with the timer');
+      });
+    } else
+      await getLocation();
   }
 
   Future<void> checkPermission() async {
