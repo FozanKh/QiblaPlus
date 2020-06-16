@@ -15,7 +15,7 @@ const kGradientBackground = BoxDecoration(
   ),
 );
 
-const kLargTextStyle = TextStyle(
+const kLargeTextStyle = TextStyle(
   fontSize: 40,
   color: Colors.white,
   fontWeight: FontWeight.w200,
@@ -32,7 +32,7 @@ const kErrTextStyle = TextStyle(
   fontSize: 15,
   color: Colors.black,
   fontWeight: FontWeight.w600,
-  fontFamily: 'Dubai',
+  // fontFamily: 'Dubai',
 );
 
 const kASmallTextStyle = TextStyle(
@@ -41,7 +41,7 @@ const kASmallTextStyle = TextStyle(
 );
 
 //Language Strings--------------------------------------------------------------------------------
-const kArLangString = 'عربي';
+const kArLangString = 'عـربـي';
 const kEnLangString = 'English';
 
 const kArTips = ": نصائح لقبلة أدق\n  عاير البوصلة بتدوير الجهاز على شكل 8  ♾\n  ابتعد عن "

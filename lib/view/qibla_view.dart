@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qibla_plus/controller/location_controller.dart';
+import 'package:qibla_plus/model/components/calibrate_view.dart';
 import 'package:qibla_plus/model/constants.dart';
 import 'package:qibla_plus/controller/logic_controller.dart';
 
@@ -36,29 +39,19 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
   void initState() {
     super.initState();
     calibrate();
-
     Provider.of<LocationController>(context, listen: false).setUpQibla();
-    Listener();
+    Timer.periodic(Duration(minutes: 10), (Timer t) {
+      calibrate();
+    });
   }
 
   void calibrate() async {
-    if (showErr || showNeedle) {
-      showErr = false;
-      showNeedle = false;
-      await Future.delayed(Duration(milliseconds: 600));
-    }
     showCalibration = true;
     setState(() {});
     await Future.delayed(Duration(seconds: 4));
-    showCalibration = false;
+    // showCalibration = false;
     setState(() {});
     await Future.delayed(Duration(milliseconds: 600));
-
-    if (Provider.of<LocationController>(context, listen: false).errExists.value) {
-      getErrMessage();
-      showErr = true;
-    } else
-      showNeedle = true;
     setState(() {});
   }
 
@@ -74,22 +67,7 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
       currErr = Container(alignment: Alignment.center, padding: EdgeInsets.all(20), child: Text(logic.locationServicesErr, style: kErrTextStyle, textAlign: TextAlign.center));
     else
       currErr = Container(alignment: Alignment.center, padding: EdgeInsets.all(20), child: kErrText);
-
-    // setState(() {});
   }
-
-  // void errExists() async {
-  //   if (Provider.of<LocationController>(context).errExists.value) {
-  //     getErrMessage();
-  //     if (showCalibration || showNeedle) {
-  //       showCalibration = false;
-  //       showNeedle = false;
-  //       await Future.delayed(Duration(milliseconds: 600));
-  //     }
-  //     showCalibration = true;
-  //     setState(() {});
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -103,39 +81,43 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
           child: Scaffold(
             backgroundColor: Colors.transparent,
             body: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    GestureDetector(
-                      child: Container(
-                        padding: EdgeInsets.only(right: 40),
-                        alignment: Alignment.centerRight,
+                    Container(
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: RawMaterialButton(
+                        elevation: 10,
+                        fillColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                         child: Text(
                           logic.langString,
-                          style: kSmallTextStyle,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
                         ),
+                        onPressed: () {
+                          setState(() {
+                            logic.updateLang();
+                          });
+                        },
                       ),
-                      onTap: () {
-                        // xx = xx ? false : true;
-                        setState(() {
-                          logic.updateLang();
-                        });
-                      },
                     ),
                     Hero(
-                      tag: 'kabbah',
+                      tag: 'qabbah',
                       child: Image.asset(
                         'images/logo.png',
-                        height: 75,
-                        width: 75,
+                        height: MediaQuery.of(context).size.width / 6,
+                        width: MediaQuery.of(context).size.width / 6,
+                        // height: 75,
+                        // width: 75,
                       ),
                     ),
                     Text(
-                      'Qibla+',
+                      'Qibla +',
                       textAlign: TextAlign.center,
-                      style: kLargTextStyle,
+                      style: kLargeTextStyle,
                     ),
                   ],
                 ),
@@ -152,81 +134,38 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle, color: Colors.white, border: Border.all(color: Colors.grey.shade200, width: 3), boxShadow: [BoxShadow(color: Colors.black87, blurRadius: 10)]),
                           ),
-                          AnimatedOpacity(
-                            opacity: (showCalibration) ? 1 : 0,
-                            duration: Duration(milliseconds: 500),
-                            child: Image.asset('images/Calibration.gif'),
-                          ),
-                          AnimatedOpacity(
-                            opacity: (showCalibration) ? 0 : 1,
-                            duration: Duration(milliseconds: 500),
-                            child: ValueListenableBuilder(
-                              valueListenable: location.errExists,
-                              builder: (context, value, child) {
-                                if (location.errExists.value) {
-                                  getErrMessage();
-                                }
-                                return AnimatedCrossFade(
-                                  crossFadeState: location.errExists.value ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                                  duration: Duration(milliseconds: 700),
-                                  firstChild: Transform.rotate(
-                                    angle: location.angle ?? 0,
-                                    child: Stack(
-                                      children: <Widget>[
-                                        Image.asset(
-                                          logic.needleAsset,
-                                        ),
-                                        Image.asset(
-                                          'images/ExactQibla.png',
-                                          color: location.isExact,
-                                        ),
-                                      ],
-                                    ),
+                          AnimatedSwitcher(
+                            duration: Duration(milliseconds: 700),
+                            child: showCalibration
+                                ? CalibrateView()
+                                : ValueListenableBuilder(
+                                    valueListenable: location.errExists,
+                                    builder: (context, value, child) {
+                                      if (location.errExists.value) {
+                                        getErrMessage();
+                                      }
+                                      return AnimatedSwitcher(
+                                        duration: Duration(milliseconds: 700),
+                                        child: location.errExists.value
+                                            ? currErr
+                                            : Transform.rotate(
+                                                angle: location.angle ?? 0,
+                                                child: Stack(
+                                                  children: <Widget>[
+                                                    Image.asset(
+                                                      logic.needleAsset,
+                                                    ),
+                                                    Image.asset(
+                                                      'images/ExactQibla.png',
+                                                      color: location.isExact,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                      );
+                                    },
                                   ),
-                                  secondChild: currErr ?? SizedBox(),
-                                  layoutBuilder: (topChild, topChildKey, bottomChild, bottomChildKey) => Stack(
-                                    overflow: Overflow.visible,
-                                    alignment: Alignment.center,
-                                    children: <Widget>[
-                                      Positioned(
-                                        key: bottomChildKey,
-                                        child: bottomChild,
-                                      ),
-                                      Positioned(
-                                        key: topChildKey,
-                                        child: topChild,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
                           )
-                          // AnimatedOpacity(
-                          //   // opacity: (showErr) ? 1 : 0,
-                          //   opacity: 0,
-                          //   duration: Duration(milliseconds: 1200),
-                          //   child: currErr,
-                          // ),
-                          // AnimatedOpacity(
-                          //   // opacity: (showNeedle) ? 1 : 0,
-                          //   opacity: 1,
-                          //   duration: Duration(milliseconds: 500),
-                          //   child: Transform.rotate(
-                          //     angle: location.angle ?? 0,
-                          //     child: Stack(
-                          //       children: <Widget>[
-                          //         Image.asset(
-                          //           logic.needleAsset,
-                          //         ),
-                          //         Image.asset(
-                          //           'images/ExactQibla.png',
-                          //           color: location.isExact,
-                          //         ),
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
                         ],
                       ),
                     ),
@@ -234,17 +173,6 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
                       duration: Duration(milliseconds: 300),
                       child: logic.tips,
                     ),
-                    // Container(
-                    //   height: 150,
-                    //   width: MediaQuery.of(context).size.width,
-                    //   padding: EdgeInsets.symmetric(horizontal: 10),
-                    //   alignment: logic.tipsAlignment,
-                    //   child: Text(
-                    //     logic.tips,
-                    //     textAlign: logic.tipsTextAlignment,
-                    //     style: kSmallTextStyle,
-                    //   ),
-                    // )
                   ],
                 ),
               ],

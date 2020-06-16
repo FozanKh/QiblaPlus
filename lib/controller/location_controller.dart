@@ -51,7 +51,7 @@ class LocationController extends ChangeNotifier {
     if (locationController == null) locationController = Location();
     await checkPermission();
     if (errExists.value) {
-      print('Checking status : Error Exitis');
+      print('Checking status : Error Exists');
       stopListening();
       print('Checking status : Stop Listening');
       print('Checking status : Error timer started');

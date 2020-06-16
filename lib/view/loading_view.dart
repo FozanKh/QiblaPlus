@@ -59,22 +59,21 @@ class _LoadingViewState extends State<LoadingView> with WidgetsBindingObserver {
 
   setUp() async {
     await logic.setUpLang();
-    await Future.delayed(Duration(milliseconds: 500));
+    // await Future.delayed(Duration(milliseconds: 500));
     Navigator.push(context, MaterialPageRoute(builder: (_) => QiblaView(logic: logic)));
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: kGradientBackground,
-      child: Center(
-        child: Hero(
-          tag: 'kabbah',
-          child: Image.asset(
-            'images/logo.png',
-            width: 100,
-            height: 100,
-          ),
+      alignment: Alignment.center,
+      color: Colors.white,
+      child: Hero(
+        tag: 'qabbah',
+        child: Image.asset(
+          'images/logo.png',
+          height: MediaQuery.of(context).size.width / 3,
+          width: MediaQuery.of(context).size.width / 3,
         ),
       ),
     );
