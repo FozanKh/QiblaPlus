@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:flutter_compass/flutter_compass.dart';
@@ -16,7 +17,7 @@ class LocationController extends ChangeNotifier {
   Location locationController;
   Timer timer;
   Color isExact = kTransparent;
-  bool errExists = false;
+  ValueNotifier<bool> errExists = ValueNotifier(false);
   bool isLocationEnabled = false;
   Permission status;
   StreamSubscription<double> headingStream;
@@ -27,10 +28,11 @@ class LocationController extends ChangeNotifier {
   }
 
   void startListening() {
-    timer = Timer.periodic(Duration(minutes: 2), (Timer t) {
+    timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
       checkStatus();
     });
     headingStream = FlutterCompass.events.listen((newHeading) {
+      print('Error Heading = $newHeading');
       heading = (newHeading) * (math.pi / 180.0);
       if (heading != null) {
         getAngle();
@@ -39,27 +41,49 @@ class LocationController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void stopListening() {
+    if (timer != null && timer.isActive) timer.cancel();
+    if (headingStream != null) headingStream.cancel();
+  }
+
   Future<void> checkStatus() async {
     print('CheckingStatus');
     if (locationController == null) locationController = Location();
     await checkPermission();
-    await getLocation();
+    if (errExists.value) {
+      print('Checking status : Error Exitis');
+      stopListening();
+      print('Checking status : Stop Listening');
+      print('Checking status : Error timer started');
+      timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
+        checkPermission();
+        if (!errExists.value) {
+          print('Checking status : Error Ended');
+          timer.cancel();
+          print('Checking status : timer cancled');
+          startListening();
+          print('Checking status : started listening again');
+        }
+        print('Checking status : Done with the timer');
+      });
+    } else
+      await getLocation();
   }
 
   Future<void> checkPermission() async {
     var tempStatus = await locationController.hasPermission();
     if (tempStatus == PermissionStatus.granted) {
-      errExists = false;
+      errExists.value = false;
       isLocationEnabled = true;
       status = Permission.isGranted;
       print('Location permission is granted');
       if (!await locationController.serviceEnabled()) {
-        errExists = true;
+        errExists.value = true;
         isLocationEnabled = false;
         print('Location services is disabled');
       }
     } else {
-      errExists = true;
+      errExists.value = true;
       status = Permission.isDenied;
       print("Location Permission isn't granted");
     }
@@ -75,8 +99,7 @@ class LocationController extends ChangeNotifier {
   Future<void> getAngle() async {
     if (lat != null && lon != null) {
       double x = math.cos(kKabbahLat) * math.sin(kKabbahLon - lon);
-      double y = math.cos(lat) * math.sin(kKabbahLat) -
-          math.sin(lat) * math.cos(kKabbahLat) * math.cos(kKabbahLon - lon);
+      double y = math.cos(lat) * math.sin(kKabbahLat) - math.sin(lat) * math.cos(kKabbahLat) * math.cos(kKabbahLon - lon);
       double diffAngle = math.atan2(x, y);
       angle = diffAngle - heading;
       isExact = (angle < 0.01 && angle > -0.01) ? null : kTransparent;

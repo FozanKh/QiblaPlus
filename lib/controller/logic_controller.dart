@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/cupertino.dart';
 import 'package:qibla_plus/model/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:qibla_plus/model/components/tips.dart' as Tips;
 
 enum Lang { en, ar }
 
@@ -10,7 +11,8 @@ class LogicController {
   String langString;
   Alignment tipsAlignment;
   TextAlign tipsTextAlignment;
-  String tips;
+  // String tips;
+  Widget tips;
   String permissionErr;
   String locationServicesErr;
   String ambiguousErr;
@@ -23,15 +25,16 @@ class LogicController {
     await getCurrLang();
     print('setUpLangDone');
     langString = (currLang == Lang.ar) ? kEnLangString : kArLangString;
-    tipsAlignment = (currLang == Lang.ar) ? Alignment.centerRight : Alignment.centerLeft;
-    tipsTextAlignment = (currLang == Lang.ar) ? TextAlign.right : TextAlign.left;
-    tips = (currLang == Lang.ar) ? kArTips : kEnTibs;
+    tips = (currLang == Lang.ar) ? Tips.kArabicTips() : Tips.kEnglishTips();
     permissionErr = (currLang == Lang.ar) ? kArPermissionErr : kEnPermissionErr;
     locationServicesErr = (currLang == Lang.ar) ? kArLocationServicesErr : kEnLocationServicesErr;
     ambiguousErr = (currLang == Lang.ar) ? kArAmbiguousErr : kEnAmbiguousErr;
+    // tipsAlignment = (currLang == Lang.ar) ? Alignment.centerRight : Alignment.centerLeft;
+    // tipsTextAlignment = (currLang == Lang.ar) ? TextAlign.right : TextAlign.left;
+    // tips = (currLang == Lang.ar) ? kArTips : kEnTibs;
   }
 
-  void getCurrLang() async {
+  Future<void> getCurrLang() async {
     print('getCurrLang');
     localData = await SharedPreferences.getInstance();
     print(localData.get('language'));
@@ -47,12 +50,13 @@ class LogicController {
     currLang = (currLang == Lang.ar) ? Lang.en : Lang.ar;
     localData.setString('language', currLang.toString());
     langString = (currLang == Lang.ar) ? kEnLangString : kArLangString;
-    tipsAlignment = (currLang == Lang.ar) ? Alignment.centerRight : Alignment.centerLeft;
-    tipsTextAlignment = (currLang == Lang.ar) ? TextAlign.right : TextAlign.left;
-    tips = (currLang == Lang.ar) ? kArTips : kEnTibs;
+    tips = (currLang == Lang.ar) ? Tips.kArabicTips() : Tips.kEnglishTips();
     permissionErr = (currLang == Lang.ar) ? kArPermissionErr : kEnPermissionErr;
     locationServicesErr = (currLang == Lang.ar) ? kArLocationServicesErr : kEnLocationServicesErr;
     ambiguousErr = (currLang == Lang.ar) ? kArAmbiguousErr : kEnAmbiguousErr;
+    // tipsAlignment = (currLang == Lang.ar) ? Alignment.centerRight : Alignment.centerLeft;
+    // tipsTextAlignment = (currLang == Lang.ar) ? TextAlign.right : TextAlign.left;
+    // tips = (currLang == Lang.ar) ? kArTips : kEnTibs;
   }
 
   //TODO: last calibration
