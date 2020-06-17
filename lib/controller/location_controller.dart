@@ -7,7 +7,6 @@ import 'package:qibla_plus/model/constants.dart';
 import 'dart:math' as math;
 import 'dart:async';
 
-
 class LocationController extends ChangeNotifier {
   double lat;
   double lon;
@@ -31,7 +30,6 @@ class LocationController extends ChangeNotifier {
       checkStatus();
     });
     headingStream = FlutterCompass.events.listen((newHeading) {
-      print('Error Heading = $newHeading');
       heading = (newHeading) * (math.pi / 180.0);
       if (heading != null) {
         getAngle();
@@ -50,24 +48,18 @@ class LocationController extends ChangeNotifier {
     if (locationController == null) locationController = Location();
     await checkPermission();
     if (errExists.value) {
-      if (!isLocationEnabled)
+      if (!isLocationEnabled) {
+        print('asking for location services');
         locationController.requestService();
-      else if (!isPermissionGranted) locationController.requestPermission();
-
-      print('Checking status : Error Exists');
+      }
       stopListening();
-      print('Checking status : Stop Listening');
-      print('Checking status : Error timer started');
       timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
         checkPermission();
         if (!errExists.value) {
-          print('Checking status : Error Ended');
           timer.cancel();
-          print('Checking status : timer cancled');
           startListening();
-          print('Checking status : started listening again');
         }
-        print('Checking status : Done with the timer');
+        notifyListeners();
       });
     } else
       await getLocation();
@@ -75,6 +67,7 @@ class LocationController extends ChangeNotifier {
 
   Future<void> checkPermission() async {
     var tempStatus = await locationController.hasPermission();
+    print('Persmission status ========= ${tempStatus.toString()}');
     if (tempStatus == PermissionStatus.granted) {
       errExists.value = false;
       isLocationEnabled = true;
@@ -87,7 +80,7 @@ class LocationController extends ChangeNotifier {
       }
     } else {
       errExists.value = true;
-      isPermissionGranted = true;
+      isPermissionGranted = false;
       print("Location Permission isn't granted");
     }
     notifyListeners();
