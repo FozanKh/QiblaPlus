@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qibla_plus/model/constants.dart';
 
-class kArabicTips extends StatelessWidget {
+class ArabicTips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,7 +19,7 @@ class kArabicTips extends StatelessWidget {
   }
 }
 
-class kEnglishTips extends StatelessWidget {
+class EnglishTips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(

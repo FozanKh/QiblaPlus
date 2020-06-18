@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => LocationController(),
       child: MaterialApp(
+        theme: ThemeData(fontFamily: 'Tajawal'),
         home: LoadingView(),
       ),
     );

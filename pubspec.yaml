@@ -37,4 +37,9 @@ flutter:
     - family: Dubai
       fonts:
         - asset: fonts/Dubai-Light.ttf
+    - family: Tajawal
+      fonts:
+        - asset: fonts/Tajawal-ExtraLight.ttf
+        - asset: fonts/Tajawal-Light.ttf
+
 

@@ -104,10 +104,9 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
                         // width: 75,
                       ),
                     ),
-                    Text(
-                      'Qibla +',
-                      textAlign: TextAlign.center,
-                      style: kLargeTextStyle,
+                    AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200),
+                      child: logic.title,
                     ),
                   ],
                 ),

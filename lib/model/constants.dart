@@ -25,7 +25,7 @@ const kSmallTextStyle = TextStyle(
   fontSize: 16,
   color: Colors.white,
   fontWeight: FontWeight.w200,
-  fontFamily: 'Dubai',
+  fontFamily: 'Tajawal',
 );
 
 const kErrTextStyle = TextStyle(
@@ -43,6 +43,9 @@ const kASmallTextStyle = TextStyle(
 //Language Strings--------------------------------------------------------------------------------
 const kArLangString = 'عـربـي';
 const kEnLangString = 'English';
+
+const kEnTitle = 'Qibla +';
+const kArTitle = '+ قبلة';
 
 const kArTips = ": نصائح لقبلة أدق\n  عاير البوصلة بتدوير الجهاز على شكل 8  ♾\n  ابتعد عن "
     "الأجهزة الإلكترونية 🧲\n ضع هاتفك بشكل مسطح📱";
@@ -63,6 +66,3 @@ const kArAmbiguousErr = "⚠\nعذراً، حدث خطأ في تحديد الق�
 const kEnAmbiguousErr = "⚠\nSorry, an error has occur please restart the app";
 
 const kErrText = Text(kEnAmbiguousErr, style: kErrTextStyle, textAlign: TextAlign.center);
-
-const kArabicTips = Tips.kArabicTips;
-const kEnglishTips = Tips.kEnglishTips;
