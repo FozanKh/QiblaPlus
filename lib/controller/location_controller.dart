@@ -48,26 +48,24 @@ class LocationController extends ChangeNotifier {
     if (locationController == null) locationController = Location();
     await checkPermission();
     if (errExists.value) {
-      if (!isLocationEnabled) {
-        print('asking for location services');
-        locationController.requestService();
-      }
       stopListening();
-      timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
-        checkPermission();
-        if (!errExists.value) {
-          timer.cancel();
-          startListening();
-        }
-        notifyListeners();
-      });
+      timer = Timer.periodic(
+        Duration(seconds: 10),
+        (Timer t) {
+          checkPermission();
+          if (!errExists.value) {
+            timer.cancel();
+            startListening();
+          }
+          notifyListeners();
+        },
+      );
     } else
       await getLocation();
   }
 
   Future<void> checkPermission() async {
     var tempStatus = await locationController.hasPermission();
-    print('Persmission status ========= ${tempStatus.toString()}');
     if (tempStatus == PermissionStatus.granted) {
       errExists.value = false;
       isLocationEnabled = true;
@@ -77,7 +75,8 @@ class LocationController extends ChangeNotifier {
         errExists.value = true;
         isLocationEnabled = false;
         print('Location services is disabled');
-      }
+      } else
+        isLocationEnabled = true;
     } else {
       errExists.value = true;
       isPermissionGranted = false;
