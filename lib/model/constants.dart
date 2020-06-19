@@ -14,13 +14,13 @@ const kGradientBackground = BoxDecoration(
   ),
 );
 
-const kLargeTextStyle = TextStyle(
+const kTitleTextStyle = TextStyle(
   fontSize: 40,
   color: Colors.white,
-  fontWeight: FontWeight.w200,
+  // fontWeight: FontWeight.w200,
 );
 
-const kTipsTextStyle = TextStyle(fontSize: 15, color: Colors.white70, fontWeight: FontWeight.w600, height: 1.6);
+const kTipsTextStyle = TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w600, height: 1.6);
 
 const kErrTextStyle = TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.w600, height: 1.5);
 

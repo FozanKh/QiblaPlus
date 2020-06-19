@@ -7,7 +7,7 @@ class ArabicTitle extends StatelessWidget {
     return Text(
       kArTitle,
       key: ValueKey('ArabicTitle'),
-      style: kLargeTextStyle,
+      style: kTitleTextStyle,
     );
   }
 }
@@ -18,7 +18,7 @@ class EnglishTitle extends StatelessWidget {
     return Text(
       kEnTitle,
       key: ValueKey('EnglishTitle'),
-      style: kLargeTextStyle,
+      style: kTitleTextStyle,
     );
   }
 }
