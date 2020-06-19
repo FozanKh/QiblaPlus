@@ -22,12 +22,6 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
   Size screen;
 
   _QiblaViewState(this.logic);
-  // @override
-  // void reassemble() {
-  //   super.reassemble();
-  //   print('reassmbled');
-  //   Provider.of<LocationController>(context, listen: false).checkStatus();
-  // }
 
   @override
   void initState() {
@@ -50,18 +44,18 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
   void getErrMessage() {
     var temp = Provider.of<LocationController>(context, listen: false);
     if (!temp.isPermissionGranted)
-      currErr = Container(alignment: Alignment.center, padding: EdgeInsets.all(20), child: Text(logic.permissionErr, style: kErrTextStyle, textAlign: TextAlign.center));
+      currErr = Container(alignment: Alignment.center, padding: EdgeInsets.all(40), child: Text(logic.permissionErr, style: kErrTextStyle, textAlign: TextAlign.center));
     else if (!temp.isLocationEnabled)
-      currErr = Container(alignment: Alignment.center, padding: EdgeInsets.all(20), child: Text(logic.locationServicesErr, style: kErrTextStyle, textAlign: TextAlign.center));
+      currErr = Container(alignment: Alignment.center, padding: EdgeInsets.all(40), child: Text(logic.locationServicesErr, style: kErrTextStyle, textAlign: TextAlign.center));
     else
-      currErr = Container(alignment: Alignment.center, padding: EdgeInsets.all(20), child: kErrText);
+      currErr = Container(alignment: Alignment.center, padding: EdgeInsets.all(40), child: kErrText);
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<LocationController>(
       builder: (context, location, child) => Container(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 30, bottom: MediaQuery.of(context).padding.bottom, right: 20, left: 20),
+        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 20, bottom: MediaQuery.of(context).padding.bottom, right: 20, left: 20),
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         decoration: kGradientBackground,

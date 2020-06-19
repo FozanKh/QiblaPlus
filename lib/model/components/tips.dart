@@ -10,7 +10,11 @@ class EnglishTips extends StatelessWidget {
       height: 150,
       width: MediaQuery.of(context).size.width,
       alignment: Alignment.centerLeft,
-      child: Text(kEnTips, textAlign: TextAlign.left, style: kSmallTextStyle),
+      child: Text(
+        kEnTips,
+        textAlign: TextAlign.left,
+        style: kTipsTextStyle,
+      ),
     );
   }
 }
@@ -23,7 +27,7 @@ class ArabicTips extends StatelessWidget {
       height: 150,
       width: MediaQuery.of(context).size.width,
       alignment: Alignment.centerRight,
-      child: Text(kArTips, textAlign: TextAlign.right, style: kSmallTextStyle),
+      child: Text(kArTips, textAlign: TextAlign.right, style: kTipsTextStyle),
     );
   }
 }

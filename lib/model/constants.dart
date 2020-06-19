@@ -20,18 +20,9 @@ const kLargeTextStyle = TextStyle(
   fontWeight: FontWeight.w200,
 );
 
-const kSmallTextStyle = TextStyle(
-  fontSize: 16,
-  color: Colors.white,
-  fontWeight: FontWeight.w200,
-);
+const kTipsTextStyle = TextStyle(fontSize: 15, color: Colors.white70, fontWeight: FontWeight.w600, height: 1.6);
 
-const kErrTextStyle = TextStyle(
-  fontSize: 15,
-  color: Colors.black,
-  fontWeight: FontWeight.w600,
-  // fontFamily: 'Dubai',
-);
+const kErrTextStyle = TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.w600, height: 1.5);
 
 //Language Strings--------------------------------------------------------------------------------
 const kArLangString = 'عــــربـــــي';
@@ -40,7 +31,7 @@ const kEnLangString = 'English';
 const kEnTitle = 'Qibla +';
 const kArTitle = '+ قبلة';
 
-const kArTips = ": نصائح لقبلة أدق\n  عاير البوصلة بتدوير الجهاز على شكل 8  ♾️\n  ابتعد عن "
+const kArTips = ": نصائح لقبلة أدق\n  عاير البوصلة بتدوير الجهاز على شكل الرقم 8  ♾️\n  ابتعد عن "
     "الأجهزة الإلكترونية  🧲\n ضع هاتفك بشكل مسطح  📱";
 
 const kEnTips = 'Tips for better qibla accuracy:\n'
@@ -53,7 +44,7 @@ const kEnPermissionErr = "⚠️\nPlease allow this app 'While using the app' lo
     "determine qibla";
 
 const kArLocationServicesErr = "⚠️\nالرجاء تفعيل خدمات الموقع من الإعدادات لمعرفة القبلة";
-const kEnLocationServicesErr = "⚠️\nPlease enable location services from your device's setting to determine qibla";
+const kEnLocationServicesErr = "⚠️\nPlease enable location services from your device's setting";
 
 const kArAmbiguousErr = "⚠️\nعذراً، حدث خطأ في تحديد القبلة، الرجاء إعادة تشغيل التطيبق";
 const kEnAmbiguousErr = "⚠️\nSorry, an error has occur please restart the app";
