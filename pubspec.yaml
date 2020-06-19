@@ -25,12 +25,11 @@ flutter_icons:
   android: true
   ios: false
   image_path: "assets/icon/icon.png"
-  image_path_android: "assets/icon/icon.png"
   adaptive_icon_background: "#4B7AA1"
   adaptive_icon_foreground: "assets/icon/logo.png"
 
-flutter:
 
+flutter:
   uses-material-design: true
 
   assets:
