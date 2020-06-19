@@ -42,10 +42,8 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
   void calibrate() async {
     showCalibration = true;
     setState(() {});
-    await Future.delayed(Duration(seconds: 4));
+    await Future.delayed(Duration(seconds: 5));
     showCalibration = false;
-    setState(() {});
-    await Future.delayed(Duration(milliseconds: 600));
     setState(() {});
   }
 
@@ -97,7 +95,7 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
                     Hero(
                       tag: 'qabbah',
                       child: Image.asset(
-                        'images/logo.png',
+                        'assets/images/logo.png',
                         height: MediaQuery.of(context).size.width / 6,
                         width: MediaQuery.of(context).size.width / 6,
                         // height: 75,
@@ -145,7 +143,7 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
                                                       logic.needleAsset,
                                                     ),
                                                     Image.asset(
-                                                      'images/ExactQibla.png',
+                                                      'assets/images/ExactQibla.png',
                                                       color: location.isExact,
                                                     ),
                                                   ],

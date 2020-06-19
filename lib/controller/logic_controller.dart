@@ -19,7 +19,7 @@ class LogicController {
   String ambiguousErr;
   Widget title;
   SharedPreferences localData;
-  String needleAsset = 'images/Needle.png';
+  String needleAsset = 'assets/images/Needle.png';
   Color isExact = kTransparent;
 
   Future<void> setUpLang() async {

@@ -8,7 +8,7 @@ class CalibrateView extends StatelessWidget {
       children: <Widget>[
         Text('Please calibrate your compass'),
         Text('by moving your device as shown below', style: TextStyle(color: Colors.grey, fontSize: 12)),
-        Image.asset('images/Calibration.gif'),
+        Image.asset('assets/images/Calibration.gif'),
       ],
     );
   }

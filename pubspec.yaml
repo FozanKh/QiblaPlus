@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  
   cupertino_icons: ^0.1.2
   location: ^3.0.0
   flutter_compass: ^0.4.1
@@ -19,27 +19,27 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.7.5
 
+flutter_icons:
+  android: true
+  ios: false
+  image_path: "assets/icon/icon.png"
+  image_path_android: "assets/icon/icon.png"
+  adaptive_icon_background: "#4B7AA1"
+  adaptive_icon_foreground: "assets/icon/logo.png"
 
 flutter:
 
   uses-material-design: true
 
   assets:
-    - images/
+    - assets/images/
 
   fonts:
-    - family: SF-Pro
-      fonts:
-        - asset: fonts/SF-Pro-Rounded-Bold.otf
-        - asset: fonts/SF-Pro-Display-Light.otf
-        - asset: fonts/SF-Pro-Display-Thin.otf
-    - family: Dubai
-      fonts:
-        - asset: fonts/Dubai-Light.ttf
     - family: Tajawal
       fonts:
-        - asset: fonts/Tajawal-ExtraLight.ttf
-        - asset: fonts/Tajawal-Light.ttf
+        - asset: assets/fonts/Tajawal-ExtraLight.ttf
+        - asset: assets/fonts/Tajawal-Light.ttf
 
 

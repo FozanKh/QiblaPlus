@@ -71,7 +71,7 @@ class _LoadingViewState extends State<LoadingView> with WidgetsBindingObserver {
       child: Hero(
         tag: 'qabbah',
         child: Image.asset(
-          'images/logo.png',
+          'assets/images/logo.png',
           height: MediaQuery.of(context).size.width / 3,
           width: MediaQuery.of(context).size.width / 3,
         ),
