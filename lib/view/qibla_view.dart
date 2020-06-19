@@ -22,12 +22,12 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
   Size screen;
 
   _QiblaViewState(this.logic);
-  @override
-  void reassemble() {
-    super.reassemble();
-    print('reassmbled');
-    Provider.of<LocationController>(context, listen: false).checkStatus();
-  }
+  // @override
+  // void reassemble() {
+  //   super.reassemble();
+  //   print('reassmbled');
+  //   Provider.of<LocationController>(context, listen: false).checkStatus();
+  // }
 
   @override
   void initState() {
@@ -61,109 +61,112 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     return Consumer<LocationController>(
       builder: (context, location, child) => Container(
-        padding: EdgeInsets.only(top: 20, bottom: 10),
+        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 30, bottom: MediaQuery.of(context).padding.bottom, right: 20, left: 20),
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         decoration: kGradientBackground,
-        child: SafeArea(
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Container(
-                      alignment: Alignment.centerRight,
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: RawMaterialButton(
-                        elevation: 10,
-                        fillColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                        child: Text(
-                          logic.langString,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      InkWell(
+                        child: Container(
+                          width: 80,
+                          height: 30,
+                          alignment: Alignment.center,
+                          decoration:
+                              BoxDecoration(color: Colors.white, shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(20), boxShadow: [BoxShadow(blurRadius: 3, color: Colors.black26)]),
+                          child: Text(
+                            logic.langString,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold, textBaseline: TextBaseline.alphabetic),
+                          ),
                         ),
-                        onPressed: () {
+                        onTap: () {
                           setState(() {
                             logic.updateLang();
                           });
                         },
                       ),
+                    ],
+                  ),
+                  Hero(
+                    tag: 'qabbah',
+                    child: Image.asset(
+                      'assets/images/logo.png',
+                      height: MediaQuery.of(context).size.width / 6,
+                      width: MediaQuery.of(context).size.width / 6,
+                      // height: 75,
+                      // width: 75,
                     ),
-                    Hero(
-                      tag: 'qabbah',
-                      child: Image.asset(
-                        'assets/images/logo.png',
-                        height: MediaQuery.of(context).size.width / 6,
-                        width: MediaQuery.of(context).size.width / 6,
-                        // height: 75,
-                        // width: 75,
-                      ),
-                    ),
-                    AnimatedSwitcher(
-                      duration: Duration(milliseconds: 200),
-                      child: logic.title,
-                    ),
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Container(
-                      constraints: BoxConstraints.tightFor(width: 3 * MediaQuery.of(context).size.width / 4, height: 3 * MediaQuery.of(context).size.width / 4),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: <Widget>[
-                          Container(
-                            alignment: Alignment.center,
-                            constraints: BoxConstraints.tightFor(width: 3 * MediaQuery.of(context).size.width / 4 - 25, height: 3 * MediaQuery.of(context).size.width / 4 - 25),
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: Colors.white, border: Border.all(color: Colors.grey.shade200, width: 3), boxShadow: [BoxShadow(color: Colors.black87, blurRadius: 10)]),
-                          ),
-                          AnimatedSwitcher(
-                            duration: Duration(milliseconds: 700),
-                            child: showCalibration
-                                ? CalibrateView()
-                                : ValueListenableBuilder(
-                                    valueListenable: location.errExists,
-                                    builder: (context, value, child) {
-                                      if (location.errExists.value) {
-                                        getErrMessage();
-                                      }
-                                      return AnimatedSwitcher(
-                                        duration: Duration(milliseconds: 700),
-                                        child: location.errExists.value
-                                            ? currErr
-                                            : Transform.rotate(
-                                                angle: location.angle ?? 0,
-                                                child: Stack(
-                                                  children: <Widget>[
-                                                    Image.asset(
-                                                      logic.needleAsset,
-                                                    ),
-                                                    Image.asset(
-                                                      'assets/images/ExactQibla.png',
-                                                      color: location.isExact,
-                                                    ),
-                                                  ],
-                                                ),
+                  ),
+                  AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200),
+                    child: logic.title,
+                  ),
+                ],
+              ),
+              Column(
+                children: <Widget>[
+                  Container(
+                    constraints: BoxConstraints.tightFor(width: 3 * MediaQuery.of(context).size.width / 4, height: 3 * MediaQuery.of(context).size.width / 4),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: <Widget>[
+                        Container(
+                          alignment: Alignment.center,
+                          constraints: BoxConstraints.tightFor(width: 3 * MediaQuery.of(context).size.width / 4 - 25, height: 3 * MediaQuery.of(context).size.width / 4 - 25),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle, color: Colors.white, border: Border.all(color: Colors.grey.shade200, width: 3), boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 5)]),
+                        ),
+                        AnimatedSwitcher(
+                          duration: Duration(milliseconds: 700),
+                          child: showCalibration
+                              ? CalibrateView()
+                              : ValueListenableBuilder(
+                                  valueListenable: location.errExists,
+                                  builder: (context, value, child) {
+                                    if (location.errExists.value) {
+                                      getErrMessage();
+                                    }
+                                    return AnimatedSwitcher(
+                                      duration: Duration(milliseconds: 700),
+                                      child: location.errExists.value
+                                          ? currErr
+                                          : Transform.rotate(
+                                              angle: location.angle ?? 0,
+                                              child: Stack(
+                                                children: <Widget>[
+                                                  Image.asset(
+                                                    logic.needleAsset,
+                                                  ),
+                                                  Image.asset(
+                                                    'assets/images/ExactQibla.png',
+                                                    color: location.isExact,
+                                                  ),
+                                                ],
                                               ),
-                                      );
-                                    },
-                                  ),
-                          )
-                        ],
-                      ),
+                                            ),
+                                    );
+                                  },
+                                ),
+                        )
+                      ],
                     ),
-                    AnimatedSwitcher(
-                      duration: Duration(milliseconds: 300),
-                      child: logic.tips,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                  AnimatedSwitcher(
+                    duration: Duration(milliseconds: 300),
+                    child: logic.tips,
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

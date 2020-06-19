@@ -25,7 +25,6 @@ const kSmallTextStyle = TextStyle(
   fontSize: 16,
   color: Colors.white,
   fontWeight: FontWeight.w200,
-  fontFamily: 'Tajawal',
 );
 
 const kErrTextStyle = TextStyle(
@@ -35,23 +34,18 @@ const kErrTextStyle = TextStyle(
   // fontFamily: 'Dubai',
 );
 
-const kASmallTextStyle = TextStyle(
-  fontSize: 15,
-  color: Colors.white,
-);
-
 //Language Strings--------------------------------------------------------------------------------
-const kArLangString = 'عـربـي';
+const kArLangString = 'عــــربـــــي';
 const kEnLangString = 'English';
 
 const kEnTitle = 'Qibla +';
 const kArTitle = '+ قبلة';
 
-const kArTips = ": نصائح لقبلة أدق\n  عاير البوصلة بتدوير الجهاز على شكل 8  ♾\n  ابتعد عن "
+const kArTips = ": نصائح لقبلة أدق\n  عاير البوصلة بتدوير الجهاز على شكل 8 ♾️\n  ابتعد عن "
     "الأجهزة الإلكترونية 🧲\n ضع هاتفك بشكل مسطح📱";
 
 const kEnTips = 'Tips for better qibla accuracy:\n'
-    ' ♾\t\tCalibrate compass by moving device in an 8-figure\n'
+    '♾️\tCalibrate compass by moving device in an 8-figure\n'
     '🧲\tMove away from electronic devices\n'
     '📱\tLay your device flat';
 
