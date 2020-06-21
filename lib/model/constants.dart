@@ -7,41 +7,60 @@ const kTransparent = Colors.transparent;
 const kLightBlue = Color(0xff263a4c);
 const kDarkBlue = Color(0xff4b7aa1);
 const kGradientBackground = BoxDecoration(
-  gradient: LinearGradient(
-    colors: [kDarkBlue, kLightBlue],
-    begin: Alignment.topRight,
-    end: Alignment.bottomLeft,
-  ),
+  gradient: LinearGradient(colors: [kDarkBlue, kLightBlue], begin: Alignment.topRight, end: Alignment.bottomLeft),
 );
 
-const kTitleTextStyle = TextStyle(
-  fontSize: 40,
+const kTitleTextStyle = TextStyle(fontSize: 40, color: Colors.white, fontFamily: 'Tajawal');
+
+const kEnTipsTextStyle = TextStyle(
   color: Colors.white,
-  // fontWeight: FontWeight.w200,
+  letterSpacing: 0.2,
+  fontFamily: 'Tajawal',
+  height: 1.5,
+);
+const kArTipsTextStyle = TextStyle(
+  color: Colors.white,
+  letterSpacing: 1.5,
+  fontFamily: 'Tajawal',
+  height: 1.5,
 );
 
-const kTipsTextStyle = TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w600, height: 1.6);
-
-const kErrTextStyle = TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.w600, height: 1.5);
+const kErrTextStyle = TextStyle(color: Colors.black, fontWeight: FontWeight.w600, height: 1.5);
 
 //Language Strings--------------------------------------------------------------------------------
-const kArLangString = 'عــــربـــــي';
+const kArLangString = 'عــربــي';
 const kEnLangString = 'English';
 
 const kEnTitle = 'Qibla +';
 const kArTitle = '+ قبلة';
 
-const kArTips = ": نصائح لقبلة أدق\n  عاير البوصلة بتدوير الجهاز على شكل الرقم 8  ♾️\n  ابتعد عن "
-    "الأجهزة الإلكترونية  🧲\n ضع هاتفك بشكل مسطح  📱";
+const kEnTip1 = 'Tips for better qibla accuracy:\n';
+const kEnTip2 = 'Calibrate compass by moving your device in an 8-figure\n';
+const kEnTip3 = '🧲 Move away from electronic devices\n';
+const kEnTip4 = '📱 Lay your device flat';
 
 const kEnTips = 'Tips for better qibla accuracy:\n'
     '♾️\tCalibrate compass by moving device in an 8-figure\n'
     '🧲\tMove away from electronic devices\n'
     '📱\tLay your device flat';
 
+const kArTips = ': نصائح لقبلة أدق'
+    '\nعاير البوصلة بتدوير الجهاز على شكل الرقم 8 ♾️'
+    '\nابتعد عن الأجهزة الإلكترونية 🧲'
+    '\nضع هاتفك بشكل مسطح 📱';
+
+const kArTip1 = ': نصائح لقبلة أدق';
+const kArTip2 = 'عاير البوصلة بتدوير الجهاز على شكل الرقم 8';
+const kArTip3 = 'ابتعد عن الأجهزة الإلكترونية 🧲';
+const kArTip4 = 'ضع هاتفك بشكل مسطح 📱';
+
+// const kArTip1 = ': نصائح لقبلة أدق\n';
+// const kArTip2 = 'عاير البوصلة بتدوير الجهاز على شكل الرقم 8 ♾️\n';
+// const kArTip3 = 'ابتعد عن الأجهزة الإلكترونية 🧲\n';
+// const kArTip4 = 'ضع هاتفك بشكل مسطح 📱';
+
 const kArPermissionErr = '⚠️\nالرجاء إعطاء هذا التطبيق صلاحيات الموقع "أثناء الأستخدام" لمعرفة القبلة';
-const kEnPermissionErr = "⚠️\nPlease allow this app 'While using the app' location privileges to "
-    "determine qibla";
+const kEnPermissionErr = "⚠️\nPlease allow this app 'While using the app' location privileges";
 
 const kArLocationServicesErr = "⚠️\nالرجاء تفعيل خدمات الموقع من الإعدادات لمعرفة القبلة";
 const kEnLocationServicesErr = "⚠️\nPlease enable location services from your device's setting";

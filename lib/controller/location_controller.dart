@@ -26,7 +26,7 @@ class LocationController extends ChangeNotifier {
   }
 
   void startListening() {
-    timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
+    timer = Timer.periodic(Duration(minutes: 4), (Timer t) {
       checkStatus();
     });
     headingStream = FlutterCompass.events.listen((newHeading) {

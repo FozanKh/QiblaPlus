@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qibla_plus/controller/location_controller.dart';
 import 'package:qibla_plus/model/components/calibrate_view.dart';
+import 'package:qibla_plus/model/components/tips.dart';
 import 'package:qibla_plus/model/constants.dart';
 import 'package:qibla_plus/controller/logic_controller.dart';
 
@@ -79,7 +80,7 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
                           child: Text(
                             logic.langString,
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold, textBaseline: TextBaseline.alphabetic),
+                            style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
                           ),
                         ),
                         onTap: () {
@@ -90,14 +91,17 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
                       ),
                     ],
                   ),
-                  Hero(
-                    tag: 'qabbah',
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      height: MediaQuery.of(context).size.width / 6,
-                      width: MediaQuery.of(context).size.width / 6,
-                      // height: 75,
-                      // width: 75,
+                  Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Hero(
+                      tag: 'qabbah',
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        height: MediaQuery.of(context).size.width / 6,
+                        width: MediaQuery.of(context).size.width / 6,
+                        // height: 75,
+                        // width: 75,
+                      ),
                     ),
                   ),
                   AnimatedSwitcher(
@@ -156,7 +160,7 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
                   ),
                   AnimatedSwitcher(
                     duration: Duration(milliseconds: 300),
-                    child: logic.tips,
+                    child: logic.currLang == Lang.ar ? ArabicTips() : EnglishTips(),
                   ),
                 ],
               ),

@@ -19,7 +19,6 @@ class MyApp extends StatelessWidget {
       create: (_) => LocationController(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(fontFamily: 'Tajawal'),
         home: LoadingView(),
       ),
     );

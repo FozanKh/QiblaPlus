@@ -12,7 +12,6 @@ class LogicController {
   String langString;
   Alignment tipsAlignment;
   TextAlign tipsTextAlignment;
-  // String tips;
   Widget tips;
   String permissionErr;
   String locationServicesErr;
@@ -32,9 +31,17 @@ class LogicController {
     permissionErr = (currLang == Lang.ar) ? kArPermissionErr : kEnPermissionErr;
     locationServicesErr = (currLang == Lang.ar) ? kArLocationServicesErr : kEnLocationServicesErr;
     ambiguousErr = (currLang == Lang.ar) ? kArAmbiguousErr : kEnAmbiguousErr;
-    // tipsAlignment = (currLang == Lang.ar) ? Alignment.centerRight : Alignment.centerLeft;
-    // tipsTextAlignment = (currLang == Lang.ar) ? TextAlign.right : TextAlign.left;
-    // tips = (currLang == Lang.ar) ? kArTips : kEnTibs;
+  }
+
+  void updateLang() {
+    currLang = (currLang == Lang.ar) ? Lang.en : Lang.ar;
+    localData.setString('language', currLang.toString());
+    langString = (currLang == Lang.ar) ? kEnLangString : kArLangString;
+    tips = (currLang == Lang.ar) ? Tips.ArabicTips() : Tips.EnglishTips();
+    title = (currLang == Lang.ar) ? Title.ArabicTitle() : Title.EnglishTitle();
+    permissionErr = (currLang == Lang.ar) ? kArPermissionErr : kEnPermissionErr;
+    locationServicesErr = (currLang == Lang.ar) ? kArLocationServicesErr : kEnLocationServicesErr;
+    ambiguousErr = (currLang == Lang.ar) ? kArAmbiguousErr : kEnAmbiguousErr;
   }
 
   Future<void> getCurrLang() async {
@@ -48,22 +55,4 @@ class LogicController {
       localData.setString('language', currLang.toString());
     }
   }
-
-  void updateLang() {
-    currLang = (currLang == Lang.ar) ? Lang.en : Lang.ar;
-    localData.setString('language', currLang.toString());
-    langString = (currLang == Lang.ar) ? kEnLangString : kArLangString;
-    tips = (currLang == Lang.ar) ? Tips.ArabicTips() : Tips.EnglishTips();
-    title = (currLang == Lang.ar) ? Title.ArabicTitle() : Title.EnglishTitle();
-    permissionErr = (currLang == Lang.ar) ? kArPermissionErr : kEnPermissionErr;
-    locationServicesErr = (currLang == Lang.ar) ? kArLocationServicesErr : kEnLocationServicesErr;
-    ambiguousErr = (currLang == Lang.ar) ? kArAmbiguousErr : kEnAmbiguousErr;
-    // tipsAlignment = (currLang == Lang.ar) ? Alignment.centerRight : Alignment.centerLeft;
-    // tipsTextAlignment = (currLang == Lang.ar) ? TextAlign.right : TextAlign.left;
-    // tips = (currLang == Lang.ar) ? kArTips : kEnTibs;
-  }
-
-  //TODO: last calibration
-  //TODO: must calibrate
-
 }
