@@ -44,12 +44,10 @@ class _LoadingViewState extends State<LoadingView> with WidgetsBindingObserver {
   }
 
   void onPause() {
-    print('App is paused');
     Provider.of<LocationController>(context, listen: false).stopListening();
   }
 
   void onResume() {
-    print('App is resumed');
     Provider.of<LocationController>(context, listen: false).checkStatus();
     Provider.of<LocationController>(context, listen: false).startListening();
   }

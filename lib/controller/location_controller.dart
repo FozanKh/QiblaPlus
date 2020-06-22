@@ -30,7 +30,6 @@ class LocationController extends ChangeNotifier {
   }
 
   void startListening() {
-    print('Started listening');
     timer = Timer.periodic(Duration(minutes: 4), (timer) {
       checkStatus();
     });
@@ -49,7 +48,6 @@ class LocationController extends ChangeNotifier {
   }
 
   Future<void> checkStatus() async {
-    print('CheckingStatus');
     if (locationController == null) locationController = Location();
     await checkPermission();
     if (errExists.value) {
@@ -57,11 +55,9 @@ class LocationController extends ChangeNotifier {
       timer = Timer.periodic(
         Duration(seconds: 5),
         (timer) {
-          print('error timer is : ${timer.isActive}');
           checkPermission();
           if (!errExists.value) {
             timer.cancel();
-            print('no error timer is : ${timer.isActive}');
             startListening();
           }
           notifyListeners();
@@ -72,24 +68,20 @@ class LocationController extends ChangeNotifier {
   }
 
   Future<void> checkPermission() async {
-    print('checking permission');
     var tempStatus = await locationController.hasPermission();
     if (tempStatus != PermissionStatus.granted && tempStatus != PermissionStatus.deniedForever) await locationController.requestPermission();
     if (tempStatus == PermissionStatus.granted) {
       errExists.value = false;
       isLocationEnabled = true;
       isPermissionGranted = true;
-      print('Location permission is granted');
       if (!await locationController.serviceEnabled()) {
         errExists.value = true;
         isLocationEnabled = false;
-        print('Location services is disabled');
       } else
         isLocationEnabled = true;
     } else {
       errExists.value = true;
       isPermissionGranted = false;
-      print("Location Permission isn't granted");
     }
     notifyListeners();
   }

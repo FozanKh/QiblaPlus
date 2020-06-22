@@ -22,9 +22,7 @@ class LogicController {
   Color isExact = kTransparent;
 
   Future<void> setUpLang() async {
-    print('setUpLang');
     await getCurrLang();
-    print('setUpLangDone');
     langString = (currLang == Lang.ar) ? kEnLangString : kArLangString;
     tips = (currLang == Lang.ar) ? Tips.ArabicTips() : Tips.EnglishTips();
     title = (currLang == Lang.ar) ? Title.ArabicTitle() : Title.EnglishTitle();
@@ -45,9 +43,7 @@ class LogicController {
   }
 
   Future<void> getCurrLang() async {
-    print('getCurrLang');
     localData = await SharedPreferences.getInstance();
-    print(localData.get('language'));
     if (localData.get('language') != null)
       currLang = (localData.get('language') == Lang.ar.toString()) ? Lang.ar : Lang.en;
     else {
