@@ -59,7 +59,20 @@ class _LoadingViewState extends State<LoadingView> with WidgetsBindingObserver {
     await Provider.of<LocationController>(context, listen: false).setUpQibla();
     Navigator.push(
       context,
-      PageRouteBuilder(transitionDuration: Duration(seconds: 1), pageBuilder: (_, __, ___) => QiblaView(logic: logic)),
+      PageRouteBuilder(
+        transitionDuration: Duration(milliseconds: 700),
+        transitionsBuilder: (
+          BuildContext context,
+          Animation<double> animation,
+          Animation<double> secondaryAnimation,
+          Widget child,
+        ) =>
+            FadeTransition(
+          opacity: animation,
+          child: child,
+        ),
+        pageBuilder: (_, __, ___) => QiblaView(logic: logic),
+      ),
     );
   }
 
