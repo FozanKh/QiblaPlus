@@ -28,7 +28,7 @@ flutter_icons:
   adaptive_icon_foreground: "assets/icon/logo.png"
   adaptive_icon_background: "assets/icon/background.png"
 
-
+ 
 flutter:
   uses-material-design: true
 

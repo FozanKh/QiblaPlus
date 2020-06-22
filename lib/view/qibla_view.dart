@@ -126,7 +126,7 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
                           AnimatedSwitcher(
                             duration: Duration(milliseconds: 700),
                             child: showCalibration
-                                ? CalibrateView()
+                                ? CalibrateView(lang: logic.currLang)
                                 : ValueListenableBuilder(
                                     valueListenable: location.errExists,
                                     builder: (context, value, child) {

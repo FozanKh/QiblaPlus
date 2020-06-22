@@ -30,7 +30,8 @@ class LocationController extends ChangeNotifier {
   }
 
   void startListening() {
-    timer = Timer.periodic(Duration(minutes: 4), (Timer t) {
+    print('Started listening');
+    timer = Timer.periodic(Duration(minutes: 4), (timer) {
       checkStatus();
     });
     headingStream = FlutterCompass.events.listen((newHeading) {
@@ -55,10 +56,12 @@ class LocationController extends ChangeNotifier {
       stopListening();
       timer = Timer.periodic(
         Duration(seconds: 5),
-        (Timer t) {
+        (timer) {
+          print('error timer is : ${timer.isActive}');
           checkPermission();
           if (!errExists.value) {
             timer.cancel();
+            print('no error timer is : ${timer.isActive}');
             startListening();
           }
           notifyListeners();
@@ -69,6 +72,7 @@ class LocationController extends ChangeNotifier {
   }
 
   Future<void> checkPermission() async {
+    print('checking permission');
     var tempStatus = await locationController.hasPermission();
     if (tempStatus != PermissionStatus.granted && tempStatus != PermissionStatus.deniedForever) await locationController.requestPermission();
     if (tempStatus == PermissionStatus.granted) {

@@ -44,6 +44,11 @@ const kArTips = ': نصائح لقبلة أدق'
     '\nابتعد عن الأجهزة الإلكترونية 🧲'
     '\nضع هاتفك بشكل مسطح 📱';
 
+const kEnCalib1 = 'Please calibrate your compass\n';
+const kEnCalib2 = 'by moving your device as shown below\n';
+const kArCalib1 = 'الرجاء معايرة البوصلة\n';
+const kArCalib2 = 'بتحريك جهازك كما في الشكل الموضح\n';
+
 //const kEnTip1 = 'Tips for better qibla accuracy:\n';
 //const kEnTip2 = 'Calibrate compass by moving your device in an 8-figure\n';
 //const kEnTip3 = '🧲 Move away from electronic devices\n';
