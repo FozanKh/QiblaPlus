@@ -1,8 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qibla_plus/controller/location_controller.dart';
 import 'package:qibla_plus/controller/logic_controller.dart';
-import 'package:qibla_plus/model/constants.dart';
 import 'package:qibla_plus/view/qibla_view.dart';
 
 class LoadingView extends StatefulWidget {
@@ -57,7 +57,10 @@ class _LoadingViewState extends State<LoadingView> with WidgetsBindingObserver {
   setUp() async {
     await logic.setUpLang();
     await Provider.of<LocationController>(context, listen: false).setUpQibla();
-    Navigator.push(context, MaterialPageRoute(builder: (_) => QiblaView(logic: logic)));
+    Navigator.push(
+      context,
+      PageRouteBuilder(transitionDuration: Duration(seconds: 1), pageBuilder: (_, __, ___) => QiblaView(logic: logic)),
+    );
   }
 
   @override
@@ -66,7 +69,7 @@ class _LoadingViewState extends State<LoadingView> with WidgetsBindingObserver {
       alignment: Alignment.center,
       color: Colors.white,
       child: Hero(
-        tag: 'qabbah',
+        tag: 'logo',
         child: Image.asset(
           'assets/images/logo.png',
           height: MediaQuery.of(context).size.width / 3,

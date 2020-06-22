@@ -15,7 +15,7 @@ class QiblaView extends StatefulWidget {
   _QiblaViewState createState() => _QiblaViewState(this.logic);
 }
 
-class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMixin {
+class _QiblaViewState extends State<QiblaView> {
   final LogicController logic;
   Widget currErr;
   bool showCalibration = false;
@@ -35,7 +35,7 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
   void calibrate() async {
     showCalibration = true;
     setState(() {});
-    await Future.delayed(Duration(seconds: 5));
+    await Future.delayed(Duration(seconds: 4));
     showCalibration = false;
     setState(() {});
   }
@@ -94,7 +94,7 @@ class _QiblaViewState extends State<QiblaView> with SingleTickerProviderStateMix
                     Padding(
                       padding: EdgeInsets.all(10.0),
                       child: Hero(
-                        tag: 'qabbah',
+                        tag: 'logo',
                         child: Image.asset(
                           'assets/images/logo.png',
                           height: MediaQuery.of(context).size.width / 6,

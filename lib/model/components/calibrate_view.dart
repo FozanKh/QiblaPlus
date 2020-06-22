@@ -32,10 +32,7 @@ class CalibrateView extends StatelessWidget {
                     text: TextSpan(text: line1, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontFamily: 'Tajawal', height: 1.3 /* , letterSpacing: 1 */), children: [
                       TextSpan(text: line2, style: TextStyle(color: Colors.grey, fontSize: 12)),
                     ])),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 70),
-                  child: SizedBox(height: 3, child: LinearProgressIndicator()),
-                )
+                Padding(padding: EdgeInsets.symmetric(horizontal: 70), child: SizedBox(height: 3, child: LinearProgressIndicator()))
               ],
             ),
           ),
@@ -44,6 +41,3 @@ class CalibrateView extends StatelessWidget {
     );
   }
 }
-
-// Text('Please calibrate your compass'),
-// Text('by moving your device as shown below', style: TextStyle(color: Colors.grey, fontSize: 12)),
