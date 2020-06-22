@@ -20,6 +20,10 @@ class LocationController extends ChangeNotifier {
   bool isPermissionGranted = false;
   StreamSubscription<double> headingStream;
 
+  LocationController() {
+    this.locationController = Location();
+  }
+
   Future<void> setUpQibla() async {
     await checkStatus();
     startListening();
@@ -50,7 +54,7 @@ class LocationController extends ChangeNotifier {
     if (errExists.value) {
       stopListening();
       timer = Timer.periodic(
-        Duration(seconds: 10),
+        Duration(seconds: 5),
         (Timer t) {
           checkPermission();
           if (!errExists.value) {
@@ -66,6 +70,7 @@ class LocationController extends ChangeNotifier {
 
   Future<void> checkPermission() async {
     var tempStatus = await locationController.hasPermission();
+    if (tempStatus != PermissionStatus.granted && tempStatus != PermissionStatus.deniedForever) await locationController.requestPermission();
     if (tempStatus == PermissionStatus.granted) {
       errExists.value = false;
       isLocationEnabled = true;

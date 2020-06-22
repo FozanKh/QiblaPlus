@@ -34,25 +34,24 @@ const kEnLangString = 'English';
 const kEnTitle = 'Qibla +';
 const kArTitle = '+ قبلة';
 
-const kEnTip1 = 'Tips for better qibla accuracy:\n';
-const kEnTip2 = 'Calibrate compass by moving your device in an 8-figure\n';
-const kEnTip3 = '🧲 Move away from electronic devices\n';
-const kEnTip4 = '📱 Lay your device flat';
-
 const kEnTips = 'Tips for better qibla accuracy:\n'
-    '♾️\tCalibrate compass by moving device in an 8-figure\n'
+    '✅\tCalibrate compass by moving device in an 8-figure\n'
     '🧲\tMove away from electronic devices\n'
     '📱\tLay your device flat';
 
 const kArTips = ': نصائح لقبلة أدق'
-    '\nعاير البوصلة بتدوير الجهاز على شكل الرقم 8 ♾️'
+    '\nعاير البوصلة بتدوير الجهاز على شكل الرقم 8 ✅'
     '\nابتعد عن الأجهزة الإلكترونية 🧲'
     '\nضع هاتفك بشكل مسطح 📱';
 
-const kArTip1 = ': نصائح لقبلة أدق';
-const kArTip2 = 'عاير البوصلة بتدوير الجهاز على شكل الرقم 8';
-const kArTip3 = 'ابتعد عن الأجهزة الإلكترونية 🧲';
-const kArTip4 = 'ضع هاتفك بشكل مسطح 📱';
+//const kEnTip1 = 'Tips for better qibla accuracy:\n';
+//const kEnTip2 = 'Calibrate compass by moving your device in an 8-figure\n';
+//const kEnTip3 = '🧲 Move away from electronic devices\n';
+//const kEnTip4 = '📱 Lay your device flat';
+//const kArTip1 = ': نصائح لقبلة أدق';
+//const kArTip2 = 'عاير البوصلة بتدوير الجهاز على شكل الرقم 8';
+//const kArTip3 = 'ابتعد عن الأجهزة الإلكترونية 🧲';
+//const kArTip4 = 'ضع هاتفك بشكل مسطح 📱';
 
 // const kArTip1 = ': نصائح لقبلة أدق\n';
 // const kArTip2 = 'عاير البوصلة بتدوير الجهاز على شكل الرقم 8 ♾️\n';

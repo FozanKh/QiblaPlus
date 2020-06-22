@@ -13,12 +13,10 @@ class LoadingView extends StatefulWidget {
 class _LoadingViewState extends State<LoadingView> with WidgetsBindingObserver {
   LogicController logic;
   AppLifecycleState appStatus;
-  LocationController location;
   bool background = false;
   @override
   void initState() {
     super.initState();
-    location = Provider.of<LocationController>(context, listen: false);
     logic = LogicController();
     WidgetsBinding.instance.addObserver(this);
     setUp();
@@ -47,19 +45,18 @@ class _LoadingViewState extends State<LoadingView> with WidgetsBindingObserver {
 
   void onPause() {
     print('App is paused');
-    location.stopListening();
+    Provider.of<LocationController>(context, listen: false).stopListening();
   }
 
   void onResume() {
     print('App is resumed');
-    // location.checkPermission();
-    location.checkStatus();
-    location.startListening();
+    Provider.of<LocationController>(context, listen: false).checkStatus();
+    Provider.of<LocationController>(context, listen: false).startListening();
   }
 
   setUp() async {
     await logic.setUpLang();
-    // await Future.delayed(Duration(milliseconds: 500));
+    await Provider.of<LocationController>(context, listen: false).setUpQibla();
     Navigator.push(context, MaterialPageRoute(builder: (_) => QiblaView(logic: logic)));
   }
 
