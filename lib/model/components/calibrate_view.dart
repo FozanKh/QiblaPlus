@@ -21,7 +21,7 @@ class CalibrateView extends StatelessWidget {
       padding: EdgeInsets.all(30),
       child: Stack(
         children: <Widget>[
-          Image.asset('assets/images/Slow20Calibration.gif'),
+          Image.asset('assets/images/Calibration.gif'),
           Padding(
             padding: EdgeInsets.only(top: 70, bottom: 40),
             child: Column(
