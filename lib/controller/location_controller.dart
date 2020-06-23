@@ -29,16 +29,19 @@ class LocationController extends ChangeNotifier {
     startListening();
   }
 
-  void startListening() {
-    timer = Timer.periodic(Duration(minutes: 4), (timer) {
-      checkStatus();
-    });
-    headingStream = FlutterCompass.events.listen((newHeading) {
-      heading = (newHeading) * (math.pi / 180.0);
-      if (heading != null) {
-        getAngle();
-      }
-    });
+  void startListening() async {
+    checkStatus();
+    if (!errExists.value) {
+      timer = Timer.periodic(Duration(minutes: 4), (timer) {
+        checkStatus();
+      });
+      headingStream = FlutterCompass.events.listen((newHeading) {
+        heading = (newHeading) * (math.pi / 180.0);
+        if (heading != null) {
+          getAngle();
+        }
+      });
+    }
     notifyListeners();
   }
 
@@ -50,6 +53,7 @@ class LocationController extends ChangeNotifier {
   Future<void> checkStatus() async {
     if (locationController == null) locationController = Location();
     await checkPermission();
+    await getLocation();
     if (errExists.value) {
       stopListening();
       timer = Timer.periodic(
@@ -58,13 +62,13 @@ class LocationController extends ChangeNotifier {
           checkPermission();
           if (!errExists.value) {
             timer.cancel();
+            getLocation();
             startListening();
           }
           notifyListeners();
         },
       );
-    } else
-      await getLocation();
+    }
   }
 
   Future<void> checkPermission() async {
@@ -100,6 +104,7 @@ class LocationController extends ChangeNotifier {
       angle = diffAngle - heading;
       isExact = (angle < 0.01 && angle > -0.01) ? null : kTransparent;
       notifyListeners();
-    }
+    } else
+      await getLocation();
   }
 }
