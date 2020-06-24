@@ -26,13 +26,11 @@ class LocationController extends ChangeNotifier {
   }
 
   Future<void> setUpQibla() async {
-    print('setUpQibla');
     await checkStatus();
     startListening();
   }
 
   void startListening() async {
-    print('startListening');
     if (!errExists.value) {
       timer = Timer.periodic(Duration(minutes: 4), (timer) {
         checkStatus();
@@ -48,13 +46,11 @@ class LocationController extends ChangeNotifier {
   }
 
   void stopListening() {
-    print('stopListening');
     if (timer != null && timer.isActive) timer.cancel();
     if (headingStream != null) headingStream.cancel();
   }
 
   Future<void> checkStatus() async {
-    print('checkStatus');
     if (locationController == null) locationController = Location();
     await checkPermission();
     if (errExists.value) {
@@ -75,7 +71,6 @@ class LocationController extends ChangeNotifier {
   }
 
   Future<void> checkPermission() async {
-    print('checkPermission');
     var tempStatus = await locationController.hasPermission();
     if (!permissionRequested && tempStatus != PermissionStatus.granted && tempStatus != PermissionStatus.deniedForever) {
       await locationController.requestPermission();
@@ -98,7 +93,6 @@ class LocationController extends ChangeNotifier {
   }
 
   Future<void> getLocation() async {
-    print('getLocation');
     var location = await locationController.getLocation();
     lat = location.latitude * math.pi / 180.0;
     lon = location.longitude * math.pi / 180.0;
@@ -107,7 +101,6 @@ class LocationController extends ChangeNotifier {
   }
 
   Future<void> getAngle() async {
-    print('getAngle');
     if (lat != null && lon != null) {
       double x = math.cos(kKabbahLat) * math.sin(kKabbahLon - lon);
       double y = math.cos(lat) * math.sin(kKabbahLat) - math.sin(lat) * math.cos(kKabbahLat) * math.cos(kKabbahLon - lon);
