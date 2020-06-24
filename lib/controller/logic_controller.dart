@@ -15,6 +15,7 @@ class LogicController {
   Widget tips;
   String permissionErr;
   String locationServicesErr;
+  String loadingMessage;
   String ambiguousErr;
   Widget title;
   SharedPreferences localData;
@@ -28,6 +29,7 @@ class LogicController {
     title = (currLang == Lang.ar) ? Title.ArabicTitle() : Title.EnglishTitle();
     permissionErr = (currLang == Lang.ar) ? kArPermissionErr : kEnPermissionErr;
     locationServicesErr = (currLang == Lang.ar) ? kArLocationServicesErr : kEnLocationServicesErr;
+    loadingMessage = (currLang == Lang.ar) ? kArLoadingMessage : kEnLoadingMessage;
     ambiguousErr = (currLang == Lang.ar) ? kArAmbiguousErr : kEnAmbiguousErr;
   }
 
@@ -39,6 +41,7 @@ class LogicController {
     title = (currLang == Lang.ar) ? Title.ArabicTitle() : Title.EnglishTitle();
     permissionErr = (currLang == Lang.ar) ? kArPermissionErr : kEnPermissionErr;
     locationServicesErr = (currLang == Lang.ar) ? kArLocationServicesErr : kEnLocationServicesErr;
+    loadingMessage = (currLang == Lang.ar) ? kArLoadingMessage : kEnLoadingMessage;
     ambiguousErr = (currLang == Lang.ar) ? kArAmbiguousErr : kEnAmbiguousErr;
   }
 

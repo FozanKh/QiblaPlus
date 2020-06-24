@@ -18,6 +18,7 @@ class LocationController extends ChangeNotifier {
   ValueNotifier<bool> errExists = ValueNotifier(false);
   bool isLocationEnabled = false;
   bool isPermissionGranted = false;
+  bool permissionRequested = false;
   StreamSubscription<double> headingStream;
 
   LocationController() {
@@ -25,12 +26,13 @@ class LocationController extends ChangeNotifier {
   }
 
   Future<void> setUpQibla() async {
+    print('setUpQibla');
     await checkStatus();
     startListening();
   }
 
   void startListening() async {
-    checkStatus();
+    print('startListening');
     if (!errExists.value) {
       timer = Timer.periodic(Duration(minutes: 4), (timer) {
         checkStatus();
@@ -46,18 +48,19 @@ class LocationController extends ChangeNotifier {
   }
 
   void stopListening() {
+    print('stopListening');
     if (timer != null && timer.isActive) timer.cancel();
     if (headingStream != null) headingStream.cancel();
   }
 
   Future<void> checkStatus() async {
+    print('checkStatus');
     if (locationController == null) locationController = Location();
     await checkPermission();
-    await getLocation();
     if (errExists.value) {
       stopListening();
       timer = Timer.periodic(
-        Duration(seconds: 5),
+        Duration(seconds: 2),
         (timer) {
           checkPermission();
           if (!errExists.value) {
@@ -72,8 +75,12 @@ class LocationController extends ChangeNotifier {
   }
 
   Future<void> checkPermission() async {
+    print('checkPermission');
     var tempStatus = await locationController.hasPermission();
-    if (tempStatus != PermissionStatus.granted && tempStatus != PermissionStatus.deniedForever) await locationController.requestPermission();
+    if (!permissionRequested && tempStatus != PermissionStatus.granted && tempStatus != PermissionStatus.deniedForever) {
+      await locationController.requestPermission();
+      permissionRequested = true;
+    }
     if (tempStatus == PermissionStatus.granted) {
       errExists.value = false;
       isLocationEnabled = true;
@@ -91,12 +98,16 @@ class LocationController extends ChangeNotifier {
   }
 
   Future<void> getLocation() async {
+    print('getLocation');
     var location = await locationController.getLocation();
     lat = location.latitude * math.pi / 180.0;
     lon = location.longitude * math.pi / 180.0;
+    getAngle();
+    notifyListeners();
   }
 
   Future<void> getAngle() async {
+    print('getAngle');
     if (lat != null && lon != null) {
       double x = math.cos(kKabbahLat) * math.sin(kKabbahLon - lon);
       double y = math.cos(lat) * math.sin(kKabbahLat) - math.sin(lat) * math.cos(kKabbahLat) * math.cos(kKabbahLon - lon);

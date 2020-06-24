@@ -43,6 +43,9 @@ const kEnPermissionErr = "⚠️\nPlease allow this app 'While using the app' lo
 const kArLocationServicesErr = "⚠️\nالرجاء تفعيل خدمات الموقع من الإعدادات لمعرفة القبلة";
 const kEnLocationServicesErr = "⚠️\nPlease enable location services from your device's setting";
 
+const kArLoadingMessage = "🔄\nجاري تحديد موقعك، الرجاء الإنتظار";
+const kEnLoadingMessage = "🔄\nLoading your location, please wait";
+
 const kArAmbiguousErr = "⚠️\nعذراً، حدث خطأ في تحديد القبلة، الرجاء إعادة تشغيل التطيبق";
 const kEnAmbiguousErr = "⚠️\nSorry, an error has occur please restart the app";
 

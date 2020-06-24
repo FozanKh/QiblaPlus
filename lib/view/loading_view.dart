@@ -14,6 +14,7 @@ class _LoadingViewState extends State<LoadingView> with WidgetsBindingObserver {
   LogicController logic;
   AppLifecycleState appStatus;
   bool background = false;
+  TimeOfDay time;
   @override
   void initState() {
     super.initState();
@@ -44,17 +45,18 @@ class _LoadingViewState extends State<LoadingView> with WidgetsBindingObserver {
   }
 
   void onPause() {
+    time = TimeOfDay.now();
     Provider.of<LocationController>(context, listen: false).stopListening();
   }
 
-  void onResume() {
-    Provider.of<LocationController>(context, listen: false).checkStatus();
+  void onResume() async {
+    await Provider.of<LocationController>(context, listen: false).checkStatus();
     Provider.of<LocationController>(context, listen: false).startListening();
   }
 
   setUp() async {
     await logic.setUpLang();
-    await Provider.of<LocationController>(context, listen: false).setUpQibla();
+    Provider.of<LocationController>(context, listen: false).setUpQibla();
     Navigator.push(
       context,
       PageRouteBuilder(
