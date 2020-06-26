@@ -32,6 +32,18 @@ class _QiblaViewState extends State<QiblaView> {
     });
   }
 
+  @override
+  reassemble() {
+    var temp = Provider.of<LocationController>(context, listen: false);
+    print(temp.lat);
+    print(temp.lon);
+    print('angle ${temp.angle}');
+    print('angle ${temp.errExists.value}');
+    print('Stream ${temp.headingStream}');
+    print('Stream ${temp.timer}');
+    print('Stream ${temp}');
+  }
+
   void calibrate() async {
     showCalibration = true;
     setState(() {});
@@ -40,14 +52,16 @@ class _QiblaViewState extends State<QiblaView> {
     setState(() {});
   }
 
-  void getErrMessage() {
+  Widget getErrMessage() {
     var temp = Provider.of<LocationController>(context, listen: false);
     if (!temp.isPermissionGranted)
-      currErr = Container(alignment: Alignment.center, padding: EdgeInsets.all(40), child: Text(logic.permissionErr, style: kErrTextStyle, textAlign: TextAlign.center));
+      return Container(alignment: Alignment.center, padding: EdgeInsets.all(40), child: Text(logic.permissionErr, style: kErrTextStyle, textAlign: TextAlign.center));
     else if (!temp.isLocationEnabled)
-      currErr = Container(alignment: Alignment.center, padding: EdgeInsets.all(40), child: Text(logic.locationServicesErr, style: kErrTextStyle, textAlign: TextAlign.center));
+      return Container(alignment: Alignment.center, padding: EdgeInsets.all(40), child: Text(logic.locationServicesErr, style: kErrTextStyle, textAlign: TextAlign.center));
+    else if (temp.lat == null || temp.lon == null)
+      return Container(alignment: Alignment.center, padding: EdgeInsets.all(40), child: Text(logic.loadingMessage, style: kErrTextStyle, textAlign: TextAlign.center));
     else
-      currErr = Container(alignment: Alignment.center, padding: EdgeInsets.all(40), child: kErrText);
+      return Container(alignment: Alignment.center, padding: EdgeInsets.all(40), child: kErrText);
   }
 
   @override
@@ -130,13 +144,10 @@ class _QiblaViewState extends State<QiblaView> {
                                 : ValueListenableBuilder(
                                     valueListenable: location.errExists,
                                     builder: (context, value, child) {
-                                      if (location.errExists.value) {
-                                        getErrMessage();
-                                      }
                                       return AnimatedSwitcher(
                                         duration: Duration(milliseconds: 700),
-                                        child: location.errExists.value
-                                            ? currErr
+                                        child: location.errExists.value || location.lat == null
+                                            ? getErrMessage()
                                             : Transform.rotate(
                                                 angle: location.angle ?? 0,
                                                 child: Stack(

@@ -18,6 +18,7 @@ class LocationController extends ChangeNotifier {
   ValueNotifier<bool> errExists = ValueNotifier(false);
   bool isLocationEnabled = false;
   bool isPermissionGranted = false;
+  bool permissionRequested = false;
   StreamSubscription<double> headingStream;
 
   LocationController() {
@@ -29,17 +30,18 @@ class LocationController extends ChangeNotifier {
     startListening();
   }
 
-  void startListening() {
-    print('Started listening');
-    timer = Timer.periodic(Duration(minutes: 4), (timer) {
-      checkStatus();
-    });
-    headingStream = FlutterCompass.events.listen((newHeading) {
-      heading = (newHeading) * (math.pi / 180.0);
-      if (heading != null) {
-        getAngle();
-      }
-    });
+  void startListening() async {
+    if (!errExists.value) {
+      timer = Timer.periodic(Duration(minutes: 4), (timer) {
+        checkStatus();
+      });
+      headingStream = FlutterCompass.events.listen((newHeading) {
+        heading = (newHeading) * (math.pi / 180.0);
+        if (heading != null) {
+          getAngle();
+        }
+      });
+    }
     notifyListeners();
   }
 
@@ -49,47 +51,43 @@ class LocationController extends ChangeNotifier {
   }
 
   Future<void> checkStatus() async {
-    print('CheckingStatus');
     if (locationController == null) locationController = Location();
     await checkPermission();
     if (errExists.value) {
       stopListening();
       timer = Timer.periodic(
-        Duration(seconds: 5),
+        Duration(seconds: 2),
         (timer) {
-          print('error timer is : ${timer.isActive}');
           checkPermission();
           if (!errExists.value) {
             timer.cancel();
-            print('no error timer is : ${timer.isActive}');
+            getLocation();
             startListening();
           }
           notifyListeners();
         },
       );
-    } else
-      await getLocation();
+    }
   }
 
   Future<void> checkPermission() async {
-    print('checking permission');
     var tempStatus = await locationController.hasPermission();
-    if (tempStatus != PermissionStatus.granted && tempStatus != PermissionStatus.deniedForever) await locationController.requestPermission();
+    if (!permissionRequested && tempStatus != PermissionStatus.granted && tempStatus != PermissionStatus.deniedForever) {
+      await locationController.requestPermission();
+      permissionRequested = true;
+    }
     if (tempStatus == PermissionStatus.granted) {
       errExists.value = false;
       isLocationEnabled = true;
       isPermissionGranted = true;
-      print('Location permission is granted');
       if (!await locationController.serviceEnabled()) {
         errExists.value = true;
         isLocationEnabled = false;
-        print('Location services is disabled');
       } else
         isLocationEnabled = true;
     } else {
       errExists.value = true;
       isPermissionGranted = false;
-      print("Location Permission isn't granted");
     }
     notifyListeners();
   }
@@ -98,6 +96,8 @@ class LocationController extends ChangeNotifier {
     var location = await locationController.getLocation();
     lat = location.latitude * math.pi / 180.0;
     lon = location.longitude * math.pi / 180.0;
+    getAngle();
+    notifyListeners();
   }
 
   Future<void> getAngle() async {
@@ -108,6 +108,7 @@ class LocationController extends ChangeNotifier {
       angle = diffAngle - heading;
       isExact = (angle < 0.01 && angle > -0.01) ? null : kTransparent;
       notifyListeners();
-    }
+    } else
+      await getLocation();
   }
 }

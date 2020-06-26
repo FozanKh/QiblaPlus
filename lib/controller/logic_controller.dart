@@ -15,6 +15,7 @@ class LogicController {
   Widget tips;
   String permissionErr;
   String locationServicesErr;
+  String loadingMessage;
   String ambiguousErr;
   Widget title;
   SharedPreferences localData;
@@ -22,14 +23,13 @@ class LogicController {
   Color isExact = kTransparent;
 
   Future<void> setUpLang() async {
-    print('setUpLang');
     await getCurrLang();
-    print('setUpLangDone');
     langString = (currLang == Lang.ar) ? kEnLangString : kArLangString;
     tips = (currLang == Lang.ar) ? Tips.ArabicTips() : Tips.EnglishTips();
     title = (currLang == Lang.ar) ? Title.ArabicTitle() : Title.EnglishTitle();
     permissionErr = (currLang == Lang.ar) ? kArPermissionErr : kEnPermissionErr;
     locationServicesErr = (currLang == Lang.ar) ? kArLocationServicesErr : kEnLocationServicesErr;
+    loadingMessage = (currLang == Lang.ar) ? kArLoadingMessage : kEnLoadingMessage;
     ambiguousErr = (currLang == Lang.ar) ? kArAmbiguousErr : kEnAmbiguousErr;
   }
 
@@ -41,13 +41,12 @@ class LogicController {
     title = (currLang == Lang.ar) ? Title.ArabicTitle() : Title.EnglishTitle();
     permissionErr = (currLang == Lang.ar) ? kArPermissionErr : kEnPermissionErr;
     locationServicesErr = (currLang == Lang.ar) ? kArLocationServicesErr : kEnLocationServicesErr;
+    loadingMessage = (currLang == Lang.ar) ? kArLoadingMessage : kEnLoadingMessage;
     ambiguousErr = (currLang == Lang.ar) ? kArAmbiguousErr : kEnAmbiguousErr;
   }
 
   Future<void> getCurrLang() async {
-    print('getCurrLang');
     localData = await SharedPreferences.getInstance();
-    print(localData.get('language'));
     if (localData.get('language') != null)
       currLang = (localData.get('language') == Lang.ar.toString()) ? Lang.ar : Lang.en;
     else {
